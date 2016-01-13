@@ -58,6 +58,18 @@
 #define TIMER_CLR_INNER(mod)  T ## mod ## CLR
 #define TIMER_CLR(mod) TIMER_CLR_INNER(mod)
 
+#define GPIO_ISR_INNER(port) PORT ## port ## _ISR
+#define GPIO_ISR(port) GPIO_ISR_INNER(port)
+
+#define GPIO_VECTOR_INNER(port) PORT ## port ## _VECTOR
+#define GPIO_VECTOR(port) GPIO_VECTOR_INNER(port)
+
+#define TIMER_ISR_INNER(timer) TIMER ## timer ## _ISR
+#define TIMER_ISR(timer) TIMER_ISR_INNER(timer)
+
+#define TIMER_VECTOR_INNER(type, idx, vect) TIMER ## idx ## _ ## type ## vect ## _VECTOR
+#define TIMER_VECTOR(type, idx, vect) TIMER_VECTOR_INNER(type, idx, vect)
+
 
 // Ugly workaround to make the pretty GPIO macro work for OUT register
 // (a control bit for TAxCCTLx uses the name 'OUT'): rename to OUT to TAOUT.
