@@ -60,13 +60,10 @@
 
 
 // Ugly workaround to make the pretty GPIO macro work for OUT register
-// (a control bit for TAxCCTLx uses the name 'OUT')
-// For other options see:
-// http://stackoverflow.com/questions/34756512/how-to-rename-a-c-preprocessor-macro
-#define TAOUT 0x004
-#if TAOUT != OUT
-#error TAOUT differs from OUT: fix this workaround!
-#endif
+// (a control bit for TAxCCTLx uses the name 'OUT'): rename to OUT to TAOUT.
+enum {
+	TAOUT = OUT,
+};
 #undef OUT
 
 #endif // LIBMSP_PERIPH_H
