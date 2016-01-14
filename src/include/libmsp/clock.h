@@ -121,7 +121,10 @@
 #define CONFIG_SMCLK_FREQ (CONFIG_SMCLK_SRC_FREQ / CONFIG_CLK_DIV_SMCLK)
 #define CONFIG_MCLK_FREQ (CONFIG_MCLK_SRC_FREQ / CONFIG_CLK_DIV_MCLK)
 
-// From datasheet "Recommended Operating Conditions" (p. 37)
+/** @brief Core voltage regulator setting
+ * @details For freq above 8MHz level needs to be higher than 0 (see datasheet
+ * "Recommended Operating Conditions" (p. 37)).
+ */
 #if CONFIG_MCLK_FREQ <= 8192000
 #define CONFIG_CORE_VOLTAGE_LEVEL   0
 #elif CONFIG_MCLK_FREQ <= 12000000
