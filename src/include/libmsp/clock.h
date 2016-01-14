@@ -121,6 +121,17 @@
 #define CONFIG_SMCLK_FREQ (CONFIG_SMCLK_SRC_FREQ / CONFIG_CLK_DIV_SMCLK)
 #define CONFIG_MCLK_FREQ (CONFIG_MCLK_SRC_FREQ / CONFIG_CLK_DIV_MCLK)
 
+// From datasheet "Recommended Operating Conditions" (p. 37)
+#if CONFIG_MCLK_FREQ <= 8192000
+#define CONFIG_CORE_VOLTAGE_LEVEL   0
+#elif CONFIG_MCLK_FREQ <= 12000000
+#define CONFIG_CORE_VOLTAGE_LEVEL   1
+#elif CONFIG_MCLK_FREQ <= 20000000
+#define CONFIG_CORE_VOLTAGE_LEVEL   2
+#else // CONFIG_MCLK_FREQ
+#define CONFIG_CORE_VOLTAGE_LEVEL   3
+#endif // CONFIG_MCLK_FREQ
+
 #else // __MSP430*__
 #error Device not supported by libmsp/clock.c
 #endif // __MSP430*__
