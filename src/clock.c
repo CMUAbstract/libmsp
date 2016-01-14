@@ -5,7 +5,7 @@
 
 #include "clock.h"
 
-void clock_setup()
+void msp_clock_setup()
 {
 #if defined(__MSP430F5340__)
 

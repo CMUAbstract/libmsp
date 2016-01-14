@@ -136,6 +136,6 @@
 #error Device not supported by libmsp/clock.c
 #endif // __MSP430*__
 
-void clock_setup();
+void msp_clock_setup();
 
 #endif // LIBMSP_CLOCK_H
