@@ -4,6 +4,7 @@ EXEC = $(LIB).a
 # TODO: copy-pasting code from mspware is not nice
 OBJECTS = \
 	clock.o \
+	watchdog.o \
 	mspware/pmm.o \
 
 include $(MAKER_ROOT)/Makefile.gcc
