@@ -70,6 +70,18 @@
 #define TIMER_VECTOR_INNER(type, idx, vect) TIMER ## idx ## _ ## type ## vect ## _VECTOR
 #define TIMER_VECTOR(type, idx, vect) TIMER_VECTOR_INNER(type, idx, vect)
 
+#define DCO_FREQ_RANGE_BITS_INNER(r) DCORSEL_ ## r;
+#define DCO_FREQ_RANGE_BITS(r) DCO_FREQ_RANGE_BITS_INNER(r)
+
+#define FLL_D_BITS_INNER(d) FLLD_ ## d
+#define FLL_D_BITS(d) FLL_D_BITS_INNER(d)
+
+#define FLL_REF_DIV_BITS_INNER(div) FLLREFDIV__ ## div
+#define FLL_REF_DIV_BITS(div) FLL_REF_DIV_BITS_INNER(div)
+
+#define CLK_DIV_BITS_INNER(clk, div) DIV ## clk ## __ ## div
+#define CLK_DIV_BITS(clk, div) CLK_DIV_BITS_INNER(clk, div)
+
 
 // Ugly workaround to make the pretty GPIO macro work for OUT register
 // (a control bit for TAxCCTLx uses the name 'OUT'): rename to OUT to TAOUT.
