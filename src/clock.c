@@ -134,6 +134,9 @@ void msp_clock_setup()
                CLK_DIV_BITS(S, CONFIG_CLK_DIV_SMCLK) |
                CLK_DIV_BITS(M, CONFIG_CLK_DIV_MCLK);
 
+#elif defined(__MSP430FR5969__)
+// TODO: factor code from apps to here
+
 #else // __MSP430*__
 #error Device not supported by libmsp/clock.c
 #endif // __MSP430*__
