@@ -136,7 +136,16 @@
 #endif // CONFIG_MCLK_FREQ
 
 #elif defined(__MSP430FR5969__)
-// TODO: factor code from apps to here
+#if CONFIG_DCOCLKDIV_FREQ == 1000000
+#define CONFIG_DCOFSEL_BITS DCOFSEL_0
+
+#elif CONFIG_DCOCLKDIV_FREQ == 2000000
+#define CONFIG_DCOFSEL_BITS DCOFSEL_3
+
+#elif CONFIG_DCOCLKDIV_FREQ == 4000000
+#define CONFIG_DCOFSEL_BITS DCOFSEL_6
+
+#endif // CONFIG_DCOCLKDIV_FREQ
 
 #else // __MSP430*__
 #error Device not supported by libmsp/clock.c
