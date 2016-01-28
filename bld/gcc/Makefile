@@ -7,12 +7,10 @@ OBJECTS = \
 	watchdog.o \
 	mspware/pmm.o \
 
-include $(MAKER_ROOT)/Makefile.gcc
-
-SRC_DIR = ../../src
+override SRC_ROOT = ../../src
 
 CFLAGS += \
-	-I$(SRC_DIR)/include/$(LIB) \
-	-I$(SRC_DIR)/mspware \
+	-I$(SRC_ROOT)/include/$(LIB) \
+	-I$(SRC_ROOT)/mspware \
 
-VPATH = $(SRC_DIR)
+include $(MAKER_ROOT)/Makefile.gcc

@@ -6,10 +6,10 @@ OBJECTS = \
 	mspware/pmm.o \
 	mem.o \
 
-SRC_DIR = ../../src
+override SRC_ROOT = ../../src
 
 CFLAGS += \
-	-I$(SRC_DIR)/include/libmsp \
-	-I$(SRC_DIR)/mspware \
+	-I$(SRC_ROOT)/include/libmsp \
+	-I$(SRC_ROOT)/mspware \
 
 include $(MAKER_ROOT)/Makefile.clang
