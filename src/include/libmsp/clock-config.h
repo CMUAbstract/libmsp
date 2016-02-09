@@ -67,9 +67,9 @@
 
 #elif defined(__MSP430FR5969__)
 
-#define CONFIG_DCOCLKDIV_FREQ 1000000ull
+// #define CONFIG_DCOCLKDIV_FREQ 1000000ull
 // #define CONFIG_DCOCLKDIV_FREQ 4000000ull
-// #define CONFIG_DCOCLKDIV_FREQ 8000000ull
+#define CONFIG_DCOCLKDIV_FREQ 8000000ull
 
 #else // __MSP430*__
 #error Device not supported by libmsp/clock.c
