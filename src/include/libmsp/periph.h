@@ -13,6 +13,12 @@
 #define INTFLAG_INNER(port, pin) P ## port ## IV_ ## P ## port ## IFG ## pin
 #define INTFLAG(port, pin) INTFLAG_INNER(port, pin)
 
+#define INTVEC_INNER(port) P ## port ## IV
+#define INTVEC(port) INTVEC_INNER(port)
+
+#define INTVEC_RANGE_INNER(port) P ## port ## IV_P ## port ## IFG7
+#define INTVEC_RANGE(port) INTVEC_RANGE_INNER(port)
+
 #define TIMER_INNER(name, reg) T ## name ## reg
 #define TIMER(name, reg) TIMER_INNER(name, reg)
 
