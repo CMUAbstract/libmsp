@@ -91,11 +91,13 @@
 #define CLK_DIV_BITS(clk, div) CLK_DIV_BITS_INNER(clk, div)
 
 
+#ifdef __MSP430F5340__
 // Ugly workaround to make the pretty GPIO macro work for OUT register
 // (a control bit for TAxCCTLx uses the name 'OUT'): rename to OUT to TAOUT.
 enum {
 	TAOUT = OUT,
 };
 #undef OUT
+#endif
 
 #endif // LIBMSP_PERIPH_H
