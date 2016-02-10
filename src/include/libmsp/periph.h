@@ -1,6 +1,8 @@
 #ifndef LIBMSP_PERIPH_H
 #define LIBMSP_PERIPH_H
 
+#include <msp430.h>
+
 #define CONCAT_INNER(a, b) a ## b
 #define CONCAT(a, b) CONCAT_INNER(a, b)
 
