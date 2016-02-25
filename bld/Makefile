@@ -6,6 +6,7 @@ OBJECTS = \
 	watchdog.o \
 	mspware/pmm.o \
 	mem.o \
+	rand.o \
 
 override SRC_ROOT = ../../src
 
