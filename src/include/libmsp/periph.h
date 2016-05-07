@@ -72,11 +72,27 @@
 #define GPIO_VECTOR_INNER(port) PORT ## port ## _VECTOR
 #define GPIO_VECTOR(port) GPIO_VECTOR_INNER(port)
 
-#define TIMER_ISR_INNER(timer) TIMER ## timer ## _ISR
-#define TIMER_ISR(timer) TIMER_ISR_INNER(timer)
+// On MSP430, CCR0 gets a dedicated vector, the rest share one vector
+#define TIMER_CCR_VECTOR_0 0
+#define TIMER_CCR_VECTOR_1 1
+#define TIMER_CCR_VECTOR_2 1
+#define TIMER_CCR_VECTOR_3 1
+#define TIMER_CCR_VECTOR_4 1
+#define TIMER_CCR_VECTOR_5 1
+#define TIMER_CCR_VECTOR_6 1
+#define TIMER_CCR_VECTOR_7 1
 
-#define TIMER_VECTOR_INNER(type, idx, vect) TIMER ## idx ## _ ## type ## vect ## _VECTOR
-#define TIMER_VECTOR(type, idx, vect) TIMER_VECTOR_INNER(type, idx, vect)
+#define TIMER_CCR_VECTOR_INNER_INNER(ccr) TIMER_CCR_VECTOR_ ## ccr
+#define TIMER_CCR_VECTOR_INNER(ccr) TIMER_CCR_VECTOR_INNER_INNER(ccr)
+#define TIMER_CCR_VECTOR(ccr) TIMER_CCR_VECTOR_INNER(ccr)
+
+#define TIMER_VECTOR_INNER_INNER(type, idx, vect) TIMER ## idx ## _ ## type ## vect ## _VECTOR
+#define TIMER_VECTOR_INNER(type, idx, vect) TIMER_VECTOR_INNER_INNER(type, idx, vect)
+#define TIMER_VECTOR(type, idx, ccr) TIMER_VECTOR_INNER(type, idx, TIMER_CCR_VECTOR(ccr))
+
+#define TIMER_ISR_INNER_INNER(type, idx, vect) TIMER ## idx ## _ ## type ## vect ## _ISR
+#define TIMER_ISR_INNER(type, idx, vect) TIMER_ISR_INNER_INNER(type, idx, vect)
+#define TIMER_ISR(type, idx, ccr) TIMER_ISR_INNER(type, idx, TIMER_CCR_VECTOR(ccr))
 
 #define DCO_FREQ_RANGE_BITS_INNER(r) DCORSEL_ ## r;
 #define DCO_FREQ_RANGE_BITS(r) DCO_FREQ_RANGE_BITS_INNER(r)
