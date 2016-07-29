@@ -6,7 +6,11 @@ OBJECTS = \
 	watchdog.o \
 	mspware/pmm.o \
 	mem.o \
-	rand.o \
+
+# pseudo-RNG is only supported with hardware multiplier
+ifeq ($(HWMULT),1)
+OBJECTS += rand.o
+endif
 
 override SRC_ROOT = ../../src
 
