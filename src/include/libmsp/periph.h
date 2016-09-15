@@ -114,6 +114,15 @@
 #define CLK_DIV_BITS_INNER(clk, div) DIV ## clk ## __ ## div
 #define CLK_DIV_BITS(clk, div) CLK_DIV_BITS_INNER(clk, div)
 
+#define COMP_REF_INNER(level_idx) CEREF0_ ## level_idx
+#define COMP_REF(level_idx) COMP_REF_INNER(level_idx)
+
+#define COMP_CHAN_SEL_INNER(idx) CEIPSEL_ ## idx
+#define COMP_CHAN_SEL(idx) COMP_CHAN_SEL_INNER(idx)
+
+#define COMP_PIN_INPUT_BUF_DISABLE_INNER(chan_idx) CEPD ## chan_idx
+#define COMP_PIN_INPUT_BUF_DISABLE(chan_idx) COMP_PIN_INPUT_BUF_DISABLE_INNER(chan_idx)
+
 
 #ifdef __MSP430F5340__
 // Ugly workaround to make the pretty GPIO macro work for OUT register

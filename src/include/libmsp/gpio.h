@@ -1,10 +1,12 @@
 #ifndef LIBMSP_GPIO_H
 #define LIBMSP_GPIO_H
 
-#ifdef __MSP430FR5969__
+#if defined(__MSP430FR5969__) || defined(__MSP430FR6989__)
 #define msp_gpio_unlock() PM5CTL0 &= ~LOCKLPM5
-#else // !__MSP430RF5969__
-#define msp_gpio_unlock()
-#endif // !__MSP430RF5969__
+#elif defined(__MSP430F5340__)
+#define msp_gpio_unlock() // no unlocking on this model
+#else // MCU model
+#error MCU not supported
+#endif // MCU model
 
 #endif // LIBMSP_GPIO_H
