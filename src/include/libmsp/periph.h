@@ -27,8 +27,16 @@
 #define TIMER_CC_INNER(name, ccridx, reg) T ## name ## reg ## ccridx
 #define TIMER_CC(name, ccridx, reg) TIMER_CC_INNER(name, ccridx, reg)
 
+// Legacy
 #define TIMERA_INTFLAG_INNER(id, ccridx) T ## id ## IV_ ## TACCR ## ccridx
 #define TIMERA_INTFLAG(id, ccridx) TIMERA_INTFLAG_INNER(id, ccridx)
+
+#define TIMER_INTFLAG_INNER(type, idx, ccridx) T ## type ## idx ## IV_ ## T ## type ## CCR ## ccridx
+#define TIMER_INTFLAG(type, idx, ccridx) TIMER_INTFLAG_INNER(type, idx, ccridx)
+
+// There is only a IV (flag vector) register for vector 1, not 0 for either timer type
+#define TIMER_INTVEC_INNER(type) T ## type ## IV
+#define TIMER_INTVEC(type) TIMER_INTVEC_INNER(type)
 
 #define UART_INNER(idx, reg) UCA ## idx ## reg
 #define UART(idx, reg) UART_INNER(idx, reg)
