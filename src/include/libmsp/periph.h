@@ -35,8 +35,8 @@
 #define TIMER_INTFLAG(type, idx, ccridx) TIMER_INTFLAG_INNER(type, idx, ccridx)
 
 // There is only a IV (flag vector) register for vector 1, not 0 for either timer type
-#define TIMER_INTVEC_INNER(type) T ## type ## IV
-#define TIMER_INTVEC(type) TIMER_INTVEC_INNER(type)
+#define TIMER_INTVEC_INNER(type, idx) T ## type ## idx ## IV
+#define TIMER_INTVEC(type, idx) TIMER_INTVEC_INNER(type, idx)
 
 #define UART_INNER(idx, reg) UCA ## idx ## reg
 #define UART(idx, reg) UART_INNER(idx, reg)
