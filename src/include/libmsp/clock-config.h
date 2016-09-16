@@ -1,7 +1,7 @@
 #ifndef LIBMSP_CLOCK_CONFIG_H
 #define LIBMSP_CLOCK_CONFIG_H
 
-#if defined(__MSP430F5340__)
+#if defined(__MSP430F5340__) || defined(__CC430F5137__)
 
 // These are fixed constants properties of MCU and/or board
 #define CONFIG_REFO_FREQ 32768ull

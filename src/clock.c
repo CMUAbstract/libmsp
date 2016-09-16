@@ -7,7 +7,7 @@
 
 void msp_clock_setup()
 {
-#if defined(__MSP430F5340__)
+#if defined(__MSP430F5340__) || defined(__CC430F5137__)
 
 #if CONFIG_CORE_VOLTAGE_LEVEL > 0
     PMM_setVCore(CONFIG_CORE_VOLTAGE_LEVEL); // 0 for Vcc 1.8v, 1 - 2.0v, 2 - 2.2v, 3 - 2.4v

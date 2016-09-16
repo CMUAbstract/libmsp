@@ -3,7 +3,7 @@
 
 #include "clock-config.h"
 
-#if defined(__MSP430F5340__)
+#if defined(__MSP430F5340__) || defined(__CC430F5137__)
 
 // See MSP430F5340 datasheet p44
 #if CONFIG_XT1_CAP >= 12
