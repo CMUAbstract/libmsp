@@ -133,7 +133,7 @@
 #define CONFIG_CORE_VOLTAGE_LEVEL   3
 #endif // CONFIG_MCLK_FREQ
 
-#elif defined(__MSP430FR5969__) || defined(__MSP430FR6989__)
+#elif defined(__MSP430FR5969__) || defined(__MSP430FR6989__) || defined(__MSP430FR5949__)
 #if CONFIG_DCOCLKDIV_FREQ == 1000000
 #define CONFIG_DCOFSEL_BITS DCOFSEL_0
 

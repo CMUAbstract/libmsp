@@ -9,11 +9,7 @@ OBJECTS = \
 	watchdog.o \
 	mspware/pmm.o \
 	mem.o \
-
-# TODO: clock setup is not supported for this device
-ifneq ($(DEVICE),msp430fr5949)
-	OBJECTS += clock.o
-endif # DEVICE
+	clock.o \
 
 # pseudo-RNG is only supported with hardware multiplier
 ifeq ($(HWMULT),1)
