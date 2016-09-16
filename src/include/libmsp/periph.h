@@ -126,9 +126,9 @@
 
 #if defined(__MSP430F5340__) || defined(__CC430F5137__)
 // Ugly workaround to make the pretty GPIO macro work for OUT register
-// (a control bit for TAxCCTLx uses the name 'OUT'): rename to OUT to TAOUT.
+// (a control bit for TAxCCTLx uses the name 'OUT'): rename to OUT to TOUT.
 enum {
-	TAOUT = OUT,
+	TOUT = OUT,
 };
 #undef OUT
 #endif
