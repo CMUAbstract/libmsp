@@ -1,8 +1,6 @@
 #ifndef LIBMSP_CLOCK_H
 #define LIBMSP_CLOCK_H
 
-#include "clock-config.h"
-
 #if defined(__MSP430F5340__) || defined(__CC430F5137__)
 
 // See MSP430F5340 datasheet p44

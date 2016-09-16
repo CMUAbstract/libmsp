@@ -25,3 +25,5 @@ override SRC_ROOT = ../../src
 override CFLAGS += \
 	-I$(SRC_ROOT)/include/libmsp \
 	-I$(SRC_ROOT)/mspware \
+
+include ../Makefile.config
