@@ -1,2 +1,2 @@
 include ../Makefile
-include $(MAKER_ROOT)/Makefile.clang
+include $(MAKER_ROOT)/Makefile.optclang
