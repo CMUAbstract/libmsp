@@ -124,13 +124,21 @@
  * "Recommended Operating Conditions" (p. 37)).
  */
 #if CONFIG_MCLK_FREQ <= 8192000
-#define CONFIG_CORE_VOLTAGE_LEVEL   0
+//#define CONFIG_CORE_VOLTAGE_LEVEL   0
 #elif CONFIG_MCLK_FREQ <= 12000000
-#define CONFIG_CORE_VOLTAGE_LEVEL   1
+#if CONFIG_CORE_VOLTAGE_LEVEL < 1
+#error CORE_VOLTAGE_LEVEL insufficient for selected frequency
+#endif
 #elif CONFIG_MCLK_FREQ <= 20000000
-#define CONFIG_CORE_VOLTAGE_LEVEL   2
+//#define CONFIG_CORE_VOLTAGE_LEVEL   2
+#if CONFIG_CORE_VOLTAGE_LEVEL < 2
+#error CORE_VOLTAGE_LEVEL insufficient for selected frequency
+#endif
 #else // CONFIG_MCLK_FREQ
-#define CONFIG_CORE_VOLTAGE_LEVEL   3
+//#define CONFIG_CORE_VOLTAGE_LEVEL   3
+#if CONFIG_CORE_VOLTAGE_LEVEL < 3
+#error CORE_VOLTAGE_LEVEL insufficient for selected frequency
+#endif
 #endif // CONFIG_MCLK_FREQ
 
 #elif defined(__MSP430FR5969__) || defined(__MSP430FR6989__) || defined(__MSP430FR5949__)

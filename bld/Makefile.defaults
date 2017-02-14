@@ -19,6 +19,10 @@ LIBMSP_MCLK_DIV ?= 1
 LIBMSP_SMCLK_DIV ?= 1
 LIBMSP_ACLK_DIV ?= 1
 
+# Core voltage level (PMMCOREV)
+#   TODO: select default based on selected freq
+LIBMSP_CORE_VOLTAGE_LEVEL ?= 0
+
 # Workarounds for the MCU crashes due to voltage ramp on startup
 # Value is a space-separated list of one or more of the following:
 #  * disable-pmm : disable PMM module
