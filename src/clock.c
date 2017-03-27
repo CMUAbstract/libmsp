@@ -137,7 +137,7 @@ void msp_clock_setup()
 #elif defined(__MSP430FR5969__) || defined(__MSP430FR6989__) || defined(__MSP430FR5949__)
 
     CSCTL0_H = CSKEY_H;
-    CSCTL1 = CONFIG_DCOFSEL_BITS;
+    CSCTL1 = CONFIG_DCOFSEL_BITS | CONFIG_DCORSEL_BITS;
 
     CSCTL2 = SELA_0 | SELS_3 | SELM_3;
     CSCTL3 = DIVA_0 | DIVS_0 | DIVM_0;
