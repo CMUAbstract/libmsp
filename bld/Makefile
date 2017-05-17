@@ -5,6 +5,7 @@ LIB = libmsp
 include $(MAKER_ROOT)/Makefile.board
 
 include ../Makefile.config
+include ../Makefile.options
 
 # TODO: copy-pasting code from mspware is not nice
 OBJECTS = \
