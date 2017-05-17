@@ -50,3 +50,6 @@ LIBMSP_CORE_VOLTAGE_LEVEL ?= 0
 # NOTE: Unfortunately, these workarounds do not get rid of the same kind of
 #  		crash that happens with debugger attached (either CCSv6 or mspdebug).
 LIBMSP_STARTUP_VOLTAGE_WORKAROUNDS ?=
+
+# Timer to use for the msp_sleep function (function not compiled if left blank)
+LIBMSP_SLEEP_TIMER ?=

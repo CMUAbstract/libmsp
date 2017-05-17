@@ -4,12 +4,19 @@ LIB = libmsp
 # Note that normally this is included automatically by Makefile.gcc
 include $(MAKER_ROOT)/Makefile.board
 
+include ../Makefile.config
+
 # TODO: copy-pasting code from mspware is not nice
 OBJECTS = \
 	watchdog.o \
 	mspware/pmm.o \
 	mem.o \
 	clock.o \
+
+ifneq ($(LIBMSP_SLEEP_TIMER),)
+OBJECTS += sleep.o
+else
+endif # !LIBMSP_SLEEP_TIMER
 
 # pseudo-RNG is only supported with hardware multiplier
 ifeq ($(HWMULT),1)
@@ -21,5 +28,3 @@ override SRC_ROOT = ../../src
 override CFLAGS += \
 	-I$(SRC_ROOT)/include/libmsp \
 	-I$(SRC_ROOT)/mspware \
-
-include ../Makefile.config
