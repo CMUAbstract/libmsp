@@ -114,6 +114,16 @@
 #define CLK_DIV_BITS_INNER(clk, div) DIV ## clk ## __ ## div
 #define CLK_DIV_BITS(clk, div) CLK_DIV_BITS_INNER(clk, div)
 
+#define COMP_INNER(type, arg) C ## type ## arg
+#define COMP(type, arg) COMP_INNER(type, arg)
+
+#define COMP2_INNER(type, arg1, arg2) C ## type ## arg1 ## arg2
+#define COMP2(type, arg1, arg2) COMP2_INNER(type, arg1, arg2)
+
+#define COMP_VECTOR_INNER(type) COMP_ ## type ## _VECTOR
+#define COMP_VECTOR(type) COMP_VECTOR_INNER(type)
+
+// Legacy. Superceded by COMP() and COMP2().
 #define COMP_REF_INNER(level_idx) CEREF0_ ## level_idx
 #define COMP_REF(level_idx) COMP_REF_INNER(level_idx)
 
