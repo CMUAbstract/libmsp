@@ -123,6 +123,13 @@
 #define COMP_VECTOR_INNER(type) COMP_ ## type ## _VECTOR
 #define COMP_VECTOR(type) COMP_VECTOR_INNER(type)
 
+#define COMP_INTFLAG_INNER(type, flag) C ## type ## IV_ ## flag
+#define COMP_INTFLAG(type, flag) COMP_INTFLAG_INNER(type, flag)
+
+// Compat to handle inconsistency in TI's header
+#define CBIV_IFG  CBIV_CBIFG
+#define CBIV_IIFG CBIV_CBIIFG
+
 // Legacy. Superceded by COMP() and COMP2().
 #define COMP_REF_INNER(level_idx) CEREF0_ ## level_idx
 #define COMP_REF(level_idx) COMP_REF_INNER(level_idx)
