@@ -74,7 +74,8 @@ ifneq ($(LIBMSP_SLEEP_TIMER),)
 LOCAL_CFLAGS += \
 	-DLIBMSP_SLEEP_TIMER_TYPE=$(word 1,$(subst ., ,$(LIBMSP_SLEEP_TIMER))) \
 	-DLIBMSP_SLEEP_TIMER_IDX=$(word 2,$(subst ., ,$(LIBMSP_SLEEP_TIMER))) \
-	-DLIBMSP_SLEEP_TIMER_CC=$(word 3,$(subst ., ,$(LIBMSP_SLEEP_TIMER)))
+	-DLIBMSP_SLEEP_TIMER_CC=$(word 3,$(subst ., ,$(LIBMSP_SLEEP_TIMER))) \
+	-DLIBMSP_SLEEP_TIMER_CLK=$(LIBMSP_SLEEP_TIMER_CLK)
 endif
 
 # Maker requires override for building as a dep
