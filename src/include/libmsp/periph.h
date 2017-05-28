@@ -140,6 +140,8 @@
 #define COMP_PIN_INPUT_BUF_DISABLE_INNER(chan_idx) CEPD ## chan_idx
 #define COMP_PIN_INPUT_BUF_DISABLE(chan_idx) COMP_PIN_INPUT_BUF_DISABLE_INNER(chan_idx)
 
+#define WATCHDOG_BITS_INNER(clk, interval) (WDTSSEL__ ## clk | WDTIS__ ## interval)
+#define WATCHDOG_BITS(clk, interval) WATCHDOG_BITS_INNER(clk, interval)
 
 #if defined(__MSP430F5340__) || defined(__CC430F5137__) || defined(__MSP430FR6989) || defined(__MSP430FR5949)
 // Ugly workaround to make the pretty GPIO macro work for OUT register

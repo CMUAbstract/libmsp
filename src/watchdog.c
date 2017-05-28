@@ -2,12 +2,9 @@
 
 #include "watchdog.h"
 
-static uint8_t watchdog_bits;
-
 void msp_watchdog_enable(uint8_t bits)
 {
     WDTCTL = WDTPW | WDTCNTCL | bits;
-    watchdog_bits = bits;
 }
 
 void msp_watchdog_disable()
@@ -17,5 +14,15 @@ void msp_watchdog_disable()
 
 void msp_watchdog_kick()
 {
-    WDTCTL = WDTPW | WDTCNTCL | watchdog_bits;
+    WDTCTL = WDTPW | ((WDTCTL | WDTCNTCL) & 0x00ff);
+}
+
+void msp_watchdog_hold()
+{
+    WDTCTL = WDTPW | ((WDTCTL | WDTHOLD) & 0x00ff);
+}
+
+void msp_watchdog_release()
+{
+    WDTCTL = WDTPW | ((WDTCTL & ~WDTHOLD) & 0x00ff);
 }
