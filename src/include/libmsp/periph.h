@@ -6,6 +6,12 @@
 #define CONCAT_INNER(a, b) a ## b
 #define CONCAT(a, b) CONCAT_INNER(a, b)
 
+#define CONCAT3_INNER(a, b, c) a ## b ## c
+#define CONCAT3(a, b, c) CONCAT3_INNER(a, b, c)
+
+#define CONCAT4_INNER(a, b, c, d) a ## b ## c ## d
+#define CONCAT4(a, b, c, d) CONCAT4_INNER(a, b, c, d)
+
 #define BIT_INNER(idx) BIT ## idx
 #define BIT(idx) BIT_INNER(idx)
 
@@ -65,8 +71,8 @@
 #define TIMER_DIV_BITS_INNER(div) ID__ ## div
 #define TIMER_DIV_BITS(div) TIMER_DIV_BITS_INNER(div)
 
-#define TIMER_A_DIV_EX_BITS_INNER(div) TAIDEX_ ## div
-#define TIMER_A_DIV_EX_BITS(div) TIMER_A_DIV_EX_BITS_INNER(div - 1)
+#define TIMER_DIVEX_BITS_INNER(type, div) T ## type ## IDEX__ ## div
+#define TIMER_DIVEX_BITS(type, div) TIMER_DIVEX_BITS_INNER(type, div)
 
 #define TIMER_CLK_SOURCE_BITS_INNER(mod, src) T ## mod ## SSEL__ ## src
 #define TIMER_CLK_SOURCE_BITS(mod, src) TIMER_CLK_SOURCE_BITS_INNER(mod, src)
@@ -142,6 +148,18 @@
 
 #define WATCHDOG_BITS_INNER(clk, interval) (WDTSSEL__ ## clk | WDTIS__ ## interval)
 #define WATCHDOG_BITS(clk, interval) WATCHDOG_BITS_INNER(clk, interval)
+
+// Fill-in macros that are missing from some of the TI's headers, for consistency
+#if defined(__CC430F5137__)
+#define TAIDEX__1 TAIDEX_0
+#define TAIDEX__2 TAIDEX_1
+#define TAIDEX__3 TAIDEX_2
+#define TAIDEX__4 TAIDEX_3
+#define TAIDEX__5 TAIDEX_4
+#define TAIDEX__6 TAIDEX_5
+#define TAIDEX__7 TAIDEX_6
+#define TAIDEX__8 TAIDEX_7
+#endif // __CC430F5137__
 
 #if defined(__MSP430F5340__) || defined(__CC430F5137__) || defined(__MSP430FR6989) || defined(__MSP430FR5949)
 // Ugly workaround to make the pretty GPIO macro work for OUT register
