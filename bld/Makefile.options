@@ -1,6 +1,9 @@
 # This makefile applies the options.
 # For list of options and documentation see Makefile.config
 
+include $(MAKER_ROOT)/Makefile.pre
+include $(MAKER_ROOT)/Makefile.msp
+
 ifneq ($(LIBMSP_XT1_FREQ),)
 LOCAL_CFLAGS += -DCONFIG_XT1_FREQ=$(LIBMSP_XT1_FREQ)
 endif
@@ -75,8 +78,13 @@ LOCAL_CFLAGS += \
 	-DLIBMSP_SLEEP_TIMER_TYPE=$(word 1,$(subst ., ,$(LIBMSP_SLEEP_TIMER))) \
 	-DLIBMSP_SLEEP_TIMER_IDX=$(word 2,$(subst ., ,$(LIBMSP_SLEEP_TIMER))) \
 	-DLIBMSP_SLEEP_TIMER_CC=$(word 3,$(subst ., ,$(LIBMSP_SLEEP_TIMER))) \
-	-DLIBMSP_SLEEP_TIMER_CLK=$(LIBMSP_SLEEP_TIMER_CLK)
-endif
+	-DLIBMSP_SLEEP_TIMER_CLK=$(LIBMSP_SLEEP_TIMER_CLK) \
+	$(call msp_timer_div,LIBMSP_SLEEP_TIMER,$(LIBMSP_SLEEP_TIMER_DIV))
+endif # LIBMSP_SLEEP_TIMER
+
+ifneq ($(LIBMSP_SLEEP_TIMER_TICKS),)
+LOCAL_CFLAGS += -DLIBMSP_SLEEP_TIMER_TICKS
+endif # LIBMSP_SLEEP_TIMER_TICKS
 
 # Maker requires override for building as a dep
 override CFLAGS += $(LOCAL_CFLAGS)

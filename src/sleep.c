@@ -1,4 +1,6 @@
 #include <msp430.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
 #include "periph.h"
 
@@ -8,13 +10,47 @@
 #define TIMER_NAME_INNER(type, id) TIMER_NAME_INNER_INNER(type, id)
 #define SLEEP_TIMER TIMER_NAME_INNER(LIBMSP_SLEEP_TIMER_TYPE, LIBMSP_SLEEP_TIMER_IDX)
 
-void msp_sleep(unsigned cycles)
+static msp_alarm_cb_t *alarm_callback;
+
+#ifdef LIBMSP_SLEEP_TIMER_TICKS
+static unsigned requested_ticks;
+static unsigned ticks;
+#endif // LIBMSP_SLEEP_TIMER_TICKS
+
+#ifdef LIBMSP_SLEEP_TIMER_TICKS
+static void setup_timer(unsigned cycles, unsigned ticks)
+#else
+static void setup_timer(unsigned cycles)
+#endif // LIBMSP_SLEEP_TIMER_TICKS
 {
-    TIMER(SLEEP_TIMER, CTL) |= TIMER_CLK_SOURCE_BITS(LIBMSP_SLEEP_TIMER_TYPE, LIBMSP_SLEEP_TIMER_CLK) |
-                               TIMER_CLR(LIBMSP_SLEEP_TIMER_TYPE);
+    TIMER(SLEEP_TIMER, CTL) = TIMER_CLK_SOURCE_BITS(LIBMSP_SLEEP_TIMER_TYPE, LIBMSP_SLEEP_TIMER_CLK) |
+                              TIMER_DIV_BITS(DIV_LIBMSP_SLEEP_TIMER) |
+                              TIMER_CLR(LIBMSP_SLEEP_TIMER_TYPE);
+    TIMER(SLEEP_TIMER, EX0) = TIMER_DIVEX_BITS(LIBMSP_SLEEP_TIMER_TYPE, DIVEX_LIBMSP_SLEEP_TIMER);
+
     TIMER_CC(SLEEP_TIMER, LIBMSP_SLEEP_TIMER_CC, CCR) = cycles;
     TIMER_CC(SLEEP_TIMER, LIBMSP_SLEEP_TIMER_CC, CCTL) &= ~CCIFG;
     TIMER_CC(SLEEP_TIMER, LIBMSP_SLEEP_TIMER_CC, CCTL) |= CCIE;
+
+#ifdef LIBMSP_SLEEP_TIMER_TICKS
+    requested_ticks = ticks;
+    ticks = 0;
+#endif // LIBMSP_SLEEP_TIMER_TICKS
+}
+
+#ifdef LIBMSP_SLEEP_TIMER_TICKS
+void msp_sleep(unsigned cycles, unsigned ticks)
+#else
+void msp_sleep(unsigned cycles)
+#endif // LIBMSP_SLEEP_TIMER_TICKS
+{
+#ifdef LIBMSP_SLEEP_TIMER_TICKS
+    setup_timer(cycles, ticks);
+#else
+    setup_timer(cycles);
+#endif // LIBMSP_SLEEP_TIMER_TICKS
+
+    alarm_callback = NULL;
 
     // The int disable/enable implement the classic check-and-sleep pattern
     __disable_interrupt();
@@ -27,16 +63,46 @@ void msp_sleep(unsigned cycles)
     __enable_interrupt();
 }
 
+#ifdef LIBMSP_SLEEP_TIMER_TICKS
+void msp_alarm(unsigned cycles, unsigned ticks, msp_alarm_cb_t *cb)
+#else
+void msp_alarm(unsigned cycles, msp_alarm_cb_t *cb)
+#endif // LIBMSP_SLEEP_TIMER_TICKS
+{
+#ifdef LIBMSP_SLEEP_TIMER_TICKS
+    setup_timer(cycles, ticks);
+#else
+    setup_timer(cycles);
+#endif // LIBMSP_SLEEP_TIMER_TICKS
+
+    alarm_callback = cb;
+    TIMER(SLEEP_TIMER, CTL) |= MC_1; // start timer
+}
+
 // We declare the ISR in the library, which disallows sequential multiplexing of this timer.
 // Note: there's no concurrent multiplexing of the timer (at least not in this
 // simple design), so the ISR can be hidden in the library.
 __attribute__ ((interrupt(TIMER_VECTOR(LIBMSP_SLEEP_TIMER_TYPE, LIBMSP_SLEEP_TIMER_IDX, LIBMSP_SLEEP_TIMER_CC))))
 void  TIMER_ISR(LIBMSP_SLEEP_TIMER_TYPE, LIBMSP_SLEEP_TIMER_IDX, LIBMSP_SLEEP_TIMER_CC) (void)
 {
-    TIMER(SLEEP_TIMER, CTL) &= ~MC_1; // stop timer
-    TIMER_CC(SLEEP_TIMER, LIBMSP_SLEEP_TIMER_CC, CCTL) &= ~CCIE; // used as flag that ISR ran
     // CCIFG automatically reset
 
-    // We were sleeping waiting for interrupt, so exit sleep
-    __bic_SR_register_on_exit(LPM4_bits);
+#ifdef LIBMSP_SLEEP_TIMER_TICKS
+    if (++ticks == requested_ticks) {
+#endif // LIBMSP_SLEEP_TIMER_TICKS
+        TIMER(SLEEP_TIMER, CTL) &= ~MC_1; // stop timer
+        TIMER_CC(SLEEP_TIMER, LIBMSP_SLEEP_TIMER_CC, CCTL) &= ~CCIE; // used as flag that ISR ran
+
+        bool wakeup = true;
+        if (alarm_callback) { // request was an alarm request
+            msp_alarm_action_t act = alarm_callback();
+            wakeup = act & MSP_ALARM_ACTION_WAKEUP;
+        }
+
+        if (wakeup) {
+            __bic_SR_register_on_exit(LPM4_bits); // exit sleep
+        }
+#ifdef LIBMSP_SLEEP_TIMER_TICKS
+    } // else: we just incremented the tick count
+#endif // LIBMSP_SLEEP_TIMER_TICKS
 }
