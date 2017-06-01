@@ -47,6 +47,12 @@
 #define UART_INNER(idx, reg) UCA ## idx ## reg
 #define UART(idx, reg) UART_INNER(idx, reg)
 
+#define UART_VECTOR_INNER(idx) USCI_A ## idx ## _VECTOR
+#define UART_VECTOR(idx) UART_VECTOR_INNER(idx)
+
+#define UART_ISR_INNER(idx) USCI_A ## idx ## _ISR
+#define UART_ISR(idx) UART_ISR_INNER(idx)
+
 #define BRS_BITS_INNER(brs) UCBRS_ ## brs
 #define BRS_BITS(brs) BRS_BITS_INNER(brs)
 
