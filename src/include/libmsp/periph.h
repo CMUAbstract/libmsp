@@ -47,6 +47,30 @@
 #define UART_INNER(idx, reg) UCA ## idx ## reg
 #define UART(idx, reg) UART_INNER(idx, reg)
 
+#if defined(__CC430__)
+
+#define UART_MCTL(idx) UART_INNER(idx, MCTL)
+#define UART_BRS_INNER(brs) UCBRS_ ## brs
+#define UART_BRS(brs) UART_BRS_INNER(brs)
+
+#define UART_SET_BR(idx, br) do { \
+    UART(idx, BR0) = br & 0xff; \
+    UART(idx, BR1) = br >> 8; \
+} while (0)
+
+
+#elif defined(__MSP430FR__)
+
+#define UART_MCTL(idx) UART_INNER(idx, MCTLW)
+#define UART_BRS(brs) (brs << 8)
+
+#define UART_SET_BR(idx, br) do { \
+    UART(idx, BR) = br; \
+} while (0)
+
+#endif // __MSP430FR__
+
+
 #define UART_VECTOR_INNER(idx) USCI_A ## idx ## _VECTOR
 #define UART_VECTOR(idx) UART_VECTOR_INNER(idx)
 
