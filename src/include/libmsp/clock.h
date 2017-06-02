@@ -81,6 +81,13 @@
 #define CONFIG_DCO_FREQ_N 249
 #define CONFIG_DCO_FREQ_D 1
 
+#elif CONFIG_DCOCLKDIV_FREQ == 8028160 && CONFIG_DCO_REF_FREQ == 32768
+
+// 32768 * (244 + 1)
+#define CONFIG_DCO_FREQ_R 5
+#define CONFIG_DCO_FREQ_N 244
+#define CONFIG_DCO_FREQ_D 1
+
 #elif CONFIG_DCOCLKDIV_FREQ == 24000000 && CONFIG_DCO_REF_FREQ == 3000000
 
 // 3000000 * (7 + 1)
@@ -98,7 +105,7 @@
      (CONFIG_DCOCLKDIV_FREQ / CONFIG_DCO_REF_CLOCK_FREQ + 1ull))
 
 #if CONFIG_DCOCLKDIV_FREQ != ((CONFIG_DCO_FREQ_N + 1) * CONFIG_DCO_REF_FREQ)
-#error Inconsistent DCO freq config
+#error Inconsistent or inexact DCO freq config
 #endif
 
 // TODO: this is not the case for all possible configs
