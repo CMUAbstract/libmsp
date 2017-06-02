@@ -70,10 +70,14 @@
     UART(idx, BRW) = br; \
 } while (0)
 
+#else // FAMILY
+#error Unsupported MCU family
+#endif // FAMILY
+
 #if defined(__CC430F5137__)
 
-#define UART_SET_SEL(port, pin) do { \
-    GPIO(port, SEL) |= BIT(pin); \
+#define UART_SET_SEL(port, pin_bits) do { \
+    GPIO(port, SEL) |= (pin_bits); \
 } while (0)
 
 #elif defined(__MSP430FR5969__) || defined(__MSP430FR5949__)
@@ -90,11 +94,9 @@
     GPIO(port, SEL1) &= ~(pin_bits); \
 } while (0)
 
-#else
+#else // DEVICE
 #error MCU not supported
-#endif
-
-#endif // __MSP430FR__
+#endif // DEVICE
 
 
 #define UART_VECTOR_INNER(idx) USCI_A ## idx ## _VECTOR
