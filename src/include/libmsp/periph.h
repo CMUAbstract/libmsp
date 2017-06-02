@@ -52,6 +52,7 @@
 #define UART_MCTL(idx) UART_INNER(idx, MCTL)
 #define UART_BRS_INNER(brs) UCBRS_ ## brs
 #define UART_BRS(brs) UART_BRS_INNER(brs)
+#define UART_INTFLAG(flag) CONCAT(USCI_UC, flag)
 
 #define UART_SET_BR(idx, br) do { \
     UART(idx, BR0) = br & 0xff; \
@@ -63,10 +64,35 @@
 
 #define UART_MCTL(idx) UART_INNER(idx, MCTLW)
 #define UART_BRS(brs) (brs << 8)
+#define UART_INTFLAG(flag) CONCAT(USCI_UART_UC, flag)
 
 #define UART_SET_BR(idx, br) do { \
     UART(idx, BRW) = br; \
 } while (0)
+
+#if defined(__CC430F5137__)
+
+#define UART_SET_SEL(port, pin) do { \
+    GPIO(port, SEL) |= BIT(pin); \
+} while (0)
+
+#elif defined(__MSP430FR5969__) || defined(__MSP430FR5949__)
+
+#define UART_SET_SEL(port, pin_bits) do { \
+    GPIO(port, SEL0) &= ~(pin_bits); \
+    GPIO(port, SEL1) |= (pin_bits); \
+} while (0)
+
+#elif defined(__MSP430FR6989__)
+
+#define UART_SET_SEL(port, pin_bits) do { \
+    GPIO(port, SEL0) |= (pin_bits); \
+    GPIO(port, SEL1) &= ~(pin_bits); \
+} while (0)
+
+#else
+#error MCU not supported
+#endif
 
 #endif // __MSP430FR__
 
