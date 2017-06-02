@@ -65,7 +65,7 @@
 #define UART_BRS(brs) (brs << 8)
 
 #define UART_SET_BR(idx, br) do { \
-    UART(idx, BR) = br; \
+    UART(idx, BRW) = br; \
 } while (0)
 
 #endif // __MSP430FR__
