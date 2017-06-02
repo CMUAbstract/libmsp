@@ -4,9 +4,6 @@ LIB = libmsp
 # Note that normally this is included automatically by Makefile.gcc
 include $(MAKER_ROOT)/Makefile.board
 
-include ../Makefile.config
-include ../Makefile.options
-
 # TODO: copy-pasting code from mspware is not nice
 OBJECTS = \
 	watchdog.o \
