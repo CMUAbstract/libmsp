@@ -158,6 +158,8 @@
 #define CONFIG_DCOFSEL_BITS DCOFSEL_4
 #define CONFIG_DCORSEL_BITS DCORSEL
 
+#else
+#error Unsupported DCO freq: CONFIG_DCOCLKDIV_FREQ
 #endif // CONFIG_DCOCLKDIV_FREQ
 
 #else // __MSP430*__
