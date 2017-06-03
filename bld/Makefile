@@ -13,13 +13,11 @@ OBJECTS = \
 
 ifneq ($(LIBMSP_SLEEP_TIMER),)
 OBJECTS += sleep.o
-else
-endif # !LIBMSP_SLEEP_TIMER
+endif # LIBMSP_SLEEP_TIMER
 
 ifneq ($(LIBMSP_UART_IDX),)
 OBJECTS += uart.o
-else
-endif # !LIBMSP_UART_IDX
+endif # LIBMSP_UART_IDX
 
 # pseudo-RNG is only supported with hardware multiplier
 ifeq ($(HWMULT),1)
