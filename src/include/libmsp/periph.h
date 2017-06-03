@@ -207,8 +207,7 @@
 #define WATCHDOG_BITS_INNER(clk, interval) (WDTSSEL__ ## clk | WDTIS__ ## interval)
 #define WATCHDOG_BITS(clk, interval) WATCHDOG_BITS_INNER(clk, interval)
 
-// Fill-in macros that are missing from some of the TI's headers, for consistency
-#if defined(__CC430F5137__)
+// Fill-in value-keyd macros that are missing from TI's headers
 #define TAIDEX__1 TAIDEX_0
 #define TAIDEX__2 TAIDEX_1
 #define TAIDEX__3 TAIDEX_2
@@ -217,7 +216,6 @@
 #define TAIDEX__6 TAIDEX_5
 #define TAIDEX__7 TAIDEX_6
 #define TAIDEX__8 TAIDEX_7
-#endif // __CC430F5137__
 
 #if defined(__MSP430F5340__) || defined(__CC430F5137__) || defined(__MSP430FR6989) || defined(__MSP430FR5949)
 // Ugly workaround to make the pretty GPIO macro work for OUT register
