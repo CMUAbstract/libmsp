@@ -1,12 +1,15 @@
 #include <msp430.h>
 
 #include <stdint.h>
+#include <stdbool.h>
+
 #include "periph.h"
 
 #include "uart.h"
 
 static uint8_t *tx_data;
 static unsigned tx_len;
+static volatile bool tx_finished;
 
 void msp_uart_open()
 {
@@ -33,16 +36,23 @@ void msp_uart_send_sync(uint8_t *payload, unsigned len)
 
     // Setup pointers for the ISR
     tx_data = payload;
-    tx_len = len - 1;
+    tx_len = len;
+    tx_finished = false;
     UART(LIBMSP_UART_IDX, IE) |= UCTXIE;
+
+// On the CC430 family, the ISR does not fire as a result of enabling IE
+// (despite IFG being on). We need to write a byte to clear the IFG, and await
+// the interrupt. Also, the TXIFG behavior is different, see ISR.
+#ifdef __CC430__
+    --tx_len;
     UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++; // first byte, clears IFG
+#endif
 
     // Sleep, while ISR TXes the remaining bytes
     //
     // We have to disable TX int from ISR, otherwise, will enter infinite ISR loop.
-    // So, we might as well use it as the sleep flag.
     __disable_interrupt(); // classic lock-check-(sleep+unlock)-lock pattern
-    while (UART(LIBMSP_UART_IDX, IE) & UCTXIE) {
+    while (!tx_finished) {
         __bis_SR_register(LPM0_bits + GIE); // will wakeup after ISR TXes last byte
         __disable_interrupt();
     }
@@ -54,14 +64,31 @@ void UART_ISR(LIBMSP_UART_IDX) (void)
 {
     switch(__even_in_range(UART(LIBMSP_UART_IDX, IV), 0x08)) {
         case UART_INTFLAG(TXIFG):
+
+// On CC430, the TXIFG fires when tx has finished, whereas
+// on MSP430FR, TXIFG fires when is ready to accept the next byte, which
+// happens before the last has finished transmitting byte. Hence, the
+// logic in the ISR is different.
+#ifdef __CC430__
             if (tx_len--) {
-                UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++;
+                UART(LIBMSPUARTLINK_UART_IDX, TXBUF) = *tx_data++;
             } else { // last byte got done
-                UART(LIBMSP_UART_IDX, IE) &= ~UCTXIE;
+                tx_finished = true;
                 __bic_SR_register_on_exit(LPM4_bits); // wakeup
             }
-            break; // nothing to do, main thread is sleeping, so just wakeup
+#else // !__CC430__
+            UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++;
+            if (--tx_len == 0) {
+                UART(LIBMSP_UART_IDX, IE) &= ~UCTXIE;
+                UART(LIBMSP_UART_IDX, IE) |= UCTXCPTIE;
+            }
+#endif // !__CC430__
+            break;
         case UART_INTFLAG(RXIFG):
+            break;
+        case UART_INTFLAG(TXCPTIFG):
+            tx_finished = true;
+            __bic_SR_register_on_exit(LPM4_bits); // wakeup
             break;
         default:
             break;
