@@ -19,6 +19,10 @@ ifneq ($(LIBMSP_UART_IDX),)
 OBJECTS += uart.o
 endif # LIBMSP_UART_IDX
 
+ifneq ($(LIBMSP_TEMP),)
+OBJECTS += temp.o
+endif # LIBMSP_TEMP
+
 # pseudo-RNG is only supported with hardware multiplier
 ifeq ($(HWMULT),1)
 OBJECTS += rand.o

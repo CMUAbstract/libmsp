@@ -115,4 +115,11 @@ else
 $(error Undefined confing variable: LIBMSP_UART_CLOCK)
 endif # LIBMSP_UART_CLOCK
 
+ifneq ($(LIBMSP_REF_SETTLE_TIME),)
+override CFLAGS += $(call interval,LIBMSP_REF_SETTLE_TIME,\
+			$(LIBMSP_REF_SETTLE_TIME),$(call calc_int,$(CLOCK_FREQ_MCLK)),0)
+else
+$(error Undefined config var: LIBMSP_REF_SETTLE_TIME)
+endif
+
 endif # LIBMSP_UART_IDX
