@@ -190,6 +190,9 @@
 #define COMP_INTFLAG_INNER(type, flag) C ## type ## IV_ ## flag
 #define COMP_INTFLAG(type, flag) COMP_INTFLAG_INNER(type, flag)
 
+#define COMP_INTFLAG2_INNER(type, flag) C ## type ## IV_ ## C ## type ## flag
+#define COMP_INTFLAG2(type, flag) COMP_INTFLAG2_INNER(type, flag)
+
 // Compat to handle inconsistency in TI's header
 #define CBIV_IFG  CBIV_CBIFG
 #define CBIV_IIFG CBIV_CBIIFG
