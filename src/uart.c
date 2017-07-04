@@ -57,6 +57,10 @@ void msp_uart_send_sync(uint8_t *payload, unsigned len)
         __disable_interrupt();
     }
     __enable_interrupt();
+
+    // TXCPTIFG (and TXIFG) both happen before the byte is
+    // transfered... so have to busywait
+    while (UART(LIBMSP_UART_IDX, STATW) & UCBUSY);
 }
 
 __attribute__ ((interrupt(UART_VECTOR(LIBMSP_UART_IDX))))
