@@ -80,6 +80,7 @@ void UART_ISR(LIBMSP_UART_IDX) (void)
             UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++;
             if (--tx_len == 0) {
                 UART(LIBMSP_UART_IDX, IE) &= ~UCTXIE;
+                UART(LIBMSP_UART_IDX, IFG) &= ~UCTXCPTIFG;
                 UART(LIBMSP_UART_IDX, IE) |= UCTXCPTIE;
             }
 #endif // !__CC430__
