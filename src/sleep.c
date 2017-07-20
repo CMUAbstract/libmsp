@@ -90,8 +90,9 @@ void  TIMER_ISR(LIBMSP_SLEEP_TIMER_TYPE, LIBMSP_SLEEP_TIMER_IDX, LIBMSP_SLEEP_TI
 #ifdef LIBMSP_SLEEP_TIMER_TICKS
     if (++ticks == requested_ticks) {
 #endif // LIBMSP_SLEEP_TIMER_TICKS
-        TIMER(SLEEP_TIMER, CTL) &= ~MC_1; // stop timer
+        TIMER(SLEEP_TIMER, CTL) &= ~MC_3; // stop timer
         TIMER_CC(SLEEP_TIMER, LIBMSP_SLEEP_TIMER_CC, CCTL) &= ~CCIE; // used as flag that ISR ran
+        TIMER_CC(SLEEP_TIMER, LIBMSP_SLEEP_TIMER_CC, CCTL) &= ~CCIFG; // clear flag, just to be sure
 
         bool wakeup = true;
         if (alarm_callback) { // request was an alarm request
