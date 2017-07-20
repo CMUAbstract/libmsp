@@ -3,12 +3,6 @@
 
 #include "tick.h"
 
-//#define LIBMSP_TICK_TIMER_TYPE   A
-//#define LIBMSP_TICK_TIMER_IDX    0
-//#define LIBMSP_TICK_TIMER_CLK    ACLK
-//#define DIV_LIBMSP_TICK_TIMER    8
-//#define DIVEX_LIBMSP_TICK_TIMER  8
-
 #define LIBMSP_TICK_TIMER CONCAT(LIBMSP_TICK_TIMER_TYPE, LIBMSP_TICK_TIMER_IDX)
 
 static uint32_t ticks = 0;
