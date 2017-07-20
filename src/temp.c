@@ -8,6 +8,8 @@
 #define TLV_CAL30 ((int *)(0x01A1A))
 #define TLV_CAL85 ((int *)(0x01A1C))
 
+#define FIXED_POINT_FACTOR 10 // units are (1 / FIXDPOINT_FACTOR) degrees C
+
 // Returns temperature in degrees C (approx range -40deg - 85deg)
 int msp_sample_temperature() {
   ADC12CTL0 &= ~ADC12ENC;           // Disable conversions
@@ -38,7 +40,7 @@ int msp_sample_temperature() {
 
   int cal30 = *TLV_CAL30;
   int cal85 = *TLV_CAL85;
-  int tempC = (sample - cal30) * 55 / (cal85 - cal30) + 30;
+  int tempC = ((int32_t)(sample - cal30) * 55 * FIXED_POINT_FACTOR) / (cal85 - cal30) + (30 * FIXED_POINT_FACTOR);
 
   LOG2("[temp] sample=%i => T=%i\r\n", sample, tempC);
 
