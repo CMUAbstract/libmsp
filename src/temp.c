@@ -27,6 +27,7 @@ int msp_sample_temperature() {
   // Wait for REF to settle
   // TODO: to use msp_sleep, we need to take the (clock+divider) as arg
   __delay_cycles(PERIOD_LIBMSP_REF_SETTLE_TIME);
+  //msp_sleep(PERIOD_LIBMSP_REF_SETTLE_TIME);
 
   ADC12CTL0 |= ADC12ENC;                  // Enable conversions
   ADC12CTL0 |= ADC12SC;                   // Start conversion
