@@ -40,9 +40,16 @@
 #define TIMER_INTFLAG_INNER(type, idx, ccridx) T ## type ## idx ## IV_ ## T ## type ## CCR ## ccridx
 #define TIMER_INTFLAG(type, idx, ccridx) TIMER_INTFLAG_INNER(type, idx, ccridx)
 
+#define TIMER_1_INTFLAG_INNER(type, idx, flag) T ## type ## idx ## IV_T ## type ## flag
+#define TIMER_1_INTFLAG(type, idx, flag) TIMER_1_INTFLAG_INNER(type, idx, flag)
+
 // There is only a IV (flag vector) register for vector 1, not 0 for either timer type
 #define TIMER_INTVEC_INNER(type, idx) T ## type ## idx ## IV
 #define TIMER_INTVEC(type, idx) TIMER_INTVEC_INNER(type, idx)
+
+// Same as above; defined for consistency in user code
+#define TIMER_1_INTVEC_INNER(type, idx) T ## type ## idx ## IV
+#define TIMER_1_INTVEC(type, idx) TIMER_1_INTVEC_INNER(type, idx)
 
 #define UART_INNER(idx, reg) UCA ## idx ## reg
 #define UART(idx, reg) UART_INNER(idx, reg)
@@ -135,6 +142,7 @@
 #define TIMER_CLK_SOURCE_BITS_INNER(mod, src) T ## mod ## SSEL__ ## src
 #define TIMER_CLK_SOURCE_BITS(mod, src) TIMER_CLK_SOURCE_BITS_INNER(mod, src)
 
+// Legacy: superceded by TIMER()
 #define TIMER_CLR_INNER(mod)  T ## mod ## CLR
 #define TIMER_CLR(mod) TIMER_CLR_INNER(mod)
 
@@ -162,9 +170,16 @@
 #define TIMER_VECTOR_INNER(type, idx, vect) TIMER_VECTOR_INNER_INNER(type, idx, vect)
 #define TIMER_VECTOR(type, idx, ccr) TIMER_VECTOR_INNER(type, idx, TIMER_CCR_VECTOR(ccr))
 
+#define TIMER_1_VECTOR_INNER_INNER(type, idx) TIMER ## idx ## _ ## type ## 1_VECTOR
+#define TIMER_1_VECTOR_INNER(type, idx) TIMER_1_VECTOR_INNER_INNER(type, idx)
+#define TIMER_1_VECTOR(type, idx) TIMER_1_VECTOR_INNER(type, idx)
+
 #define TIMER_ISR_INNER_INNER(type, idx, vect) TIMER ## idx ## _ ## type ## vect ## _ISR
 #define TIMER_ISR_INNER(type, idx, vect) TIMER_ISR_INNER_INNER(type, idx, vect)
 #define TIMER_ISR(type, idx, ccr) TIMER_ISR_INNER(type, idx, TIMER_CCR_VECTOR(ccr))
+
+#define TIMER_1_ISR_INNER(type, idx) TIMER ## idx ## _ ## type ## 1_ISR
+#define TIMER_1_ISR(type, idx) TIMER_1_ISR_INNER(type, idx)
 
 #define DCO_FREQ_RANGE_BITS_INNER(r) DCORSEL_ ## r;
 #define DCO_FREQ_RANGE_BITS(r) DCO_FREQ_RANGE_BITS_INNER(r)
