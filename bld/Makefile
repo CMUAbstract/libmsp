@@ -19,6 +19,10 @@ ifneq ($(LIBMSP_UART_IDX),)
 OBJECTS += uart.o
 endif # LIBMSP_UART_IDX
 
+ifneq ($(LIBMSP_TICK_TIMER),)
+OBJECTS += tick.o
+endif # LIBMSP_TICK
+
 ifneq ($(LIBMSP_TEMP),)
 OBJECTS += temp.o
 endif # LIBMSP_TEMP
