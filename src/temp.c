@@ -31,6 +31,7 @@ int msp_sample_temperature() {
 
   ADC12CTL0 |= ADC12ENC;                  // Enable conversions
   ADC12CTL0 |= ADC12SC;                   // Start conversion
+  ADC12CTL0 &= ~ADC12SC;                  // We only need to toggle to start conversion
   while (ADC12CTL1 & ADC12BUSY);
 
   int sample = ADC12MEM0;
