@@ -225,7 +225,7 @@
 #define WATCHDOG_BITS_INNER(clk, interval) (WDTSSEL__ ## clk | WDTIS__ ## interval)
 #define WATCHDOG_BITS(clk, interval) WATCHDOG_BITS_INNER(clk, interval)
 
-#define REF_INNER(lvl) REFVSEL_ # lvl
+#define REF_INNER(lvl) REFVSEL_ ## lvl
 #define REF(lvl) REF_INNER(lvl)
 
 // Fill-in value-keyd macros that are missing from TI's headers
