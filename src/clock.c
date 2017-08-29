@@ -140,10 +140,21 @@ void msp_clock_setup()
 #define ss(x) s(x)
 
 #pragma message "bits" ss(CONFIG_DCOFSEL_BITS)
-
+#if CONFIG_DCOCLKDIV_FREQ == 16000000
+	// 16MHz
+	FRCTL0 = 0xA500 | ((1) << 4);  //FRCTLPW | NWAITS_1;
+#endif
     CSCTL0_H = CSKEY_H;
 //CSCTL1 = CONFIG_DCOFSEL_BITS;
+#if CONFIG_DCOCLKDIV_FREQ == 8000000
+#pragma message "8MHz" 
+	// 8MHz
     CSCTL1 = DCORSEL + DCOFSEL_3;
+#elif CONFIG_DCOCLKDIV_FREQ == 16000000
+#pragma message "16MHz" 
+	// 16MHz
+    CSCTL1 = DCORSEL + DCOFSEL_4;
+#endif
 
     CSCTL2 = SELA_0 | SELS_3 | SELM_3;
     CSCTL3 = DIVA_0 | DIVS_0 | DIVM_0;
