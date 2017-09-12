@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 #include "periph.h"
-
+#include <libmspbuiltins/builtins.h>
 #include "uart.h"
 
 static uint8_t *tx_data;

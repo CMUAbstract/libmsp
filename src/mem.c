@@ -21,3 +21,17 @@ void *memset(void *s, int c, size_t n)
     return s;
 }
 #endif
+
+void my_memset(void *s, int c, size_t n)
+{
+        __asm__ volatile ("mov r15, r12\n"
+			"add r15, r13\n"
+			"cmp r13, r12\n"
+			"jz $+10\n"
+			"mov.b r14, 0(r12)\n"
+			"inc r12\n"
+			"jmp $-10\n"
+			);
+
+}
+
