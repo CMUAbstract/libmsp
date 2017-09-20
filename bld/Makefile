@@ -32,6 +32,8 @@ ifeq ($(HWMULT),1)
 OBJECTS += rand.o
 endif
 
+DEPS += libio \
+
 override SRC_ROOT = ../../src
 
 override CFLAGS += \
