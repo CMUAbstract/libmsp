@@ -7,6 +7,15 @@
 #include <libmspbuiltins/builtins.h>
 #include "uart.h"
 
+#define STRINGIFY(x) XSTRINGIFY(x)
+#define XSTRINGIFY(x) #x
+#pragma message ("uart_port =" STRINGIFY(LIBMSP_UART_PIN_TX_PORT))
+#pragma message ("uart_pin =" STRINGIFY(LIBMSP_UART_PIN_TX_PIN))
+#pragma message ("uart_idx =" STRINGIFY(LIBMSP_UART_IDX))
+#pragma message ("uart_baudrate_br =" STRINGIFY(LIBMSP_UART_BAUDRATE_BR))
+#pragma message ("uart_baudrate_brs =" STRINGIFY(LIBMSP_UART_BAUDRATE_BRS))
+#pragma message ("uart_clk =" STRINGIFY(LIBMSP_UART_CLOCK))
+
 static uint8_t *tx_data;
 static unsigned tx_len;
 static volatile bool tx_finished;
@@ -22,6 +31,8 @@ void msp_uart_open()
     UART_MCTL(LIBMSP_UART_IDX) = UCBRF_0 | UART_BRS(LIBMSP_UART_BAUDRATE_BRS);
 
     UART(LIBMSP_UART_IDX, CTL1) &= ~UCSWRST; // turn on
+		P3OUT |= BIT6;
+		P3DIR |= BIT6;
 }
 
 void msp_uart_close()
