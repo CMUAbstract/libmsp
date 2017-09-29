@@ -19,21 +19,7 @@
 static uint8_t *tx_data;
 static unsigned tx_len;
 static volatile bool tx_finished;
-
-void msp_uart_open()
-{
-    UART_SET_SEL(LIBMSP_UART_PIN_TX_PORT, BIT(LIBMSP_UART_PIN_TX_PIN));
-
-    UART(LIBMSP_UART_IDX, CTL1) |= UCSWRST; // put state machine in reset
-    UART(LIBMSP_UART_IDX, CTL1) |= CONCAT(UCSSEL__, LIBMSP_UART_CLOCK);
-
-    UART_SET_BR(LIBMSP_UART_IDX, LIBMSP_UART_BAUDRATE_BR);
-    UART_MCTL(LIBMSP_UART_IDX) = UCBRF_0 | UART_BRS(LIBMSP_UART_BAUDRATE_BRS);
-
-    UART(LIBMSP_UART_IDX, CTL1) &= ~UCSWRST; // turn on
-		P3OUT |= BIT6;
-		P3DIR |= BIT6;
-}
+volatile int test = 0;
 
 void msp_uart_close()
 {
@@ -63,23 +49,41 @@ void msp_uart_send_sync(uint8_t *payload, unsigned len)
     //
     // We have to disable TX int from ISR, otherwise, will enter infinite ISR loop.
     __disable_interrupt(); // classic lock-check-(sleep+unlock)-lock pattern
+				P3OUT |= BIT7;
+				P3DIR |= BIT7;
     while (!tx_finished) {
+				test++;
         __bis_SR_register(LPM0_bits + GIE); // will wakeup after ISR TXes last byte
         __disable_interrupt();
     }
-    __enable_interrupt();
+		P3OUT |= BIT5;
+		P3DIR |= BIT5;
+
+		__enable_interrupt();
 
     // TXCPTIFG (and TXIFG) both happen before the byte is
     // transfered... so have to busywait
     while (UART(LIBMSP_UART_IDX, STATW) & UCBUSY);
 }
 
-__attribute__ ((interrupt(UART_VECTOR(LIBMSP_UART_IDX))))
-void UART_ISR(LIBMSP_UART_IDX) (void)
-{
-    switch(__even_in_range(UART(LIBMSP_UART_IDX, IV), 0x08)) {
+//__attribute__ ((interrupt(49)))
+//__attribute__ ((interrupt(UART_VECTOR(LIBMSP_UART_IDX))))
+//void UART_ISR(LIBMSP_UART_IDX) (void)
+#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
+#pragma vector=USCI_A0_VECTOR
+__interrupt void USCI_A0_ISR(void)
+#elif defined(__GNUC__)
+void __attribute__ ((interrupt(USCI_A0_VECTOR))) USCI_A0_ISR (void)
+#else
+#error Compiler not supported!
+#endif
+{		char temp;
+						if(test == 1){
+							//P3OUT |= BIT6;
+							//P3DIR |= BIT6;
+						}	
+    switch(__even_in_range(UART(LIBMSP_UART_IDX, IV), USCI_UART_UCTXCPTIFG)) {
         case UART_INTFLAG(TXIFG):
-
 // On CC430, the TXIFG fires when tx has finished, whereas
 // on MSP430FR, TXIFG fires when is ready to accept the next byte, which
 // happens before the last has finished transmitting byte. Hence, the
@@ -92,11 +96,21 @@ void UART_ISR(LIBMSP_UART_IDX) (void)
                 __bic_SR_register_on_exit(LPM4_bits); // wakeup
             }
 #else // !__CC430__
-            UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++;
+					/*	if(*tx_data == 'P'){
+							P3OUT |= BIT6;
+							P3DIR |= BIT6;
+						}
+					*/
+						temp = *tx_data;
+						UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++;
             if (--tx_len == 0) {
                 UART(LIBMSP_UART_IDX, IE) &= ~UCTXIE;
                 UART(LIBMSP_UART_IDX, IFG) &= ~UCTXCPTIFG;
                 UART(LIBMSP_UART_IDX, IE) |= UCTXCPTIE;
+							if(temp == 'P'){
+							P3OUT |= BIT6;
+							P3DIR |= BIT6;
+							}
             }
 #endif // !__CC430__
             break;
@@ -109,4 +123,23 @@ void UART_ISR(LIBMSP_UART_IDX) (void)
         default:
             break;
     }
+}
+
+__attribute__((section("__interrupt_vector_usci_a0"),aligned(2)))
+void(*__vector_usci_a0)(void) = UART_ISR(LIBMSP_UART_IDX) ;
+
+
+void msp_uart_open()
+{
+    //unsigned *vect = (unsigned *) 0xFFF0;
+		//*vect = UART_ISR(LIBMSP_UART_IDX);
+		UART_SET_SEL(LIBMSP_UART_PIN_TX_PORT, BIT(LIBMSP_UART_PIN_TX_PIN));
+
+    UART(LIBMSP_UART_IDX, CTL1) |= UCSWRST; // put state machine in reset
+    UART(LIBMSP_UART_IDX, CTL1) |= CONCAT(UCSSEL__, LIBMSP_UART_CLOCK);
+
+    UART_SET_BR(LIBMSP_UART_IDX, LIBMSP_UART_BAUDRATE_BR);
+    UART_MCTL(LIBMSP_UART_IDX) = UCBRF_0 | UART_BRS(LIBMSP_UART_BAUDRATE_BRS);
+
+    UART(LIBMSP_UART_IDX, CTL1) &= ~UCSWRST; // turn on
 }
