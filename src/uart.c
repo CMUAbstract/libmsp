@@ -36,17 +36,11 @@ void msp_uart_send_sync(uint8_t *payload, unsigned len)
 
     // Setup pointers for the ISR
     tx_data = payload;
-    tx_len = len;
+    tx_len = len - 1; // we queue first byte immediately below
     tx_finished = false;
-    UART(LIBMSP_UART_IDX, IE) |= UCTXIE;
 
-// On the CC430 family, the ISR does not fire as a result of enabling IE
-// (despite IFG being on). We need to write a byte to clear the IFG, and await
-// the interrupt. Also, the TXIFG behavior is different, see ISR.
-#ifdef __CC430__
-    --tx_len;
     UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++; // first byte, clears IFG
-#endif
+    UART(LIBMSP_UART_IDX, IE) |= UCTXIE;
 
     // Sleep, while ISR TXes the remaining bytes
     //
@@ -68,32 +62,40 @@ ISR(USCI_A0_VECTOR)
     switch(__even_in_range(UART(LIBMSP_UART_IDX, IV), 0x08)) {
         case UART_INTFLAG(TXIFG):
 
-// On CC430, the TXIFG fires when tx has finished, whereas
-// on MSP430FR, TXIFG fires when is ready to accept the next byte, which
-// happens before the last has finished transmitting byte. Hence, the
-// logic in the ISR is different.
-#ifdef __CC430__
+#if defined(__MSP_USCI__)
             if (tx_len--) {
-                UART(LIBMSPUARTLINK_UART_IDX, TXBUF) = *tx_data++;
+                UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++;
             } else { // last byte got done
                 tx_finished = true;
                 __bic_SR_register_on_exit(LPM4_bits); // wakeup
             }
-#else // !__CC430__
-            UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++;
-            if (--tx_len == 0) {
+#elif defined(__MSP_EUSCI__)
+            if (tx_len > 0) {
+                UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++;
+            } else { // tx_len == 0: TXBUF ready to accept byte after last
                 UART(LIBMSP_UART_IDX, IE) &= ~UCTXIE;
+
+                // The next TXCPTIFG must refer to the last byte
                 UART(LIBMSP_UART_IDX, IFG) &= ~UCTXCPTIFG;
                 UART(LIBMSP_UART_IDX, IE) |= UCTXCPTIE;
             }
-#endif // !__CC430__
+            --tx_len;
+#else // __MSP_*__
+#error Unsupported UART type: see PERIPHDEFS for your chip in maker/Makefile.board
+#endif // __MSP_*__
             break;
         case UART_INTFLAG(RXIFG):
             break;
+#if defined(__MSP_EUSCI__)
         case UART_INTFLAG(TXCPTIFG):
             tx_finished = true;
             __bic_SR_register_on_exit(LPM4_bits); // wakeup
             break;
+#elif defined(__MSP_USCI__)
+        // nothing
+#else // __MSP_*__
+#error Unsupported UART type: see PERIPHDEFS for your chip in maker/Makefile.board
+#endif // __MSP_*__
         default:
             break;
     }
