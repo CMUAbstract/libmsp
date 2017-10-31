@@ -9,12 +9,6 @@
 
 #define STRINGIFY(x) XSTRINGIFY(x)
 #define XSTRINGIFY(x) #x
-#pragma message ("uart_port =" STRINGIFY(LIBMSP_UART_PIN_TX_PORT))
-#pragma message ("uart_pin =" STRINGIFY(LIBMSP_UART_PIN_TX_PIN))
-#pragma message ("uart_idx =" STRINGIFY(LIBMSP_UART_IDX))
-#pragma message ("uart_baudrate_br =" STRINGIFY(LIBMSP_UART_BAUDRATE_BR))
-#pragma message ("uart_baudrate_brs =" STRINGIFY(LIBMSP_UART_BAUDRATE_BRS))
-#pragma message ("uart_clk =" STRINGIFY(LIBMSP_UART_CLOCK))
 
 static uint8_t *tx_data;
 static unsigned tx_len;
