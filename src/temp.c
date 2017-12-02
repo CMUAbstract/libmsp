@@ -1,5 +1,9 @@
 #include <msp430.h>
 
+#ifdef __clang__
+#include <libmspbuiltins/builtins.h>
+#endif // __clang__
+
 #include <libio/console.h>
 #include "temp.h"
 

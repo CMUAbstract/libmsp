@@ -3,6 +3,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#ifdef __clang__
+#include <libmspbuiltins/builtins.h>
+#endif // __clang__
+
 #include "periph.h"
 #include "uart.h"
 

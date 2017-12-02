@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#ifdef __clang__
+#include <libmspbuiltins/builtins.h>
+#endif // __clang__
+
 #include "periph.h"
 #include "sleep.h"
 
