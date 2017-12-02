@@ -63,8 +63,7 @@ void msp_uart_send_sync(uint8_t *payload, unsigned len)
     while (UART(LIBMSP_UART_IDX, STATW) & UCBUSY);
 }
 
-__attribute__ ((interrupt(UART_VECTOR(LIBMSP_UART_IDX))))
-void UART_ISR(LIBMSP_UART_IDX) (void)
+ISR(USCI_A0_VECTOR)
 {
     switch(__even_in_range(UART(LIBMSP_UART_IDX, IV), 0x08)) {
         case UART_INTFLAG(TXIFG):

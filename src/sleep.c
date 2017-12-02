@@ -82,8 +82,7 @@ void msp_alarm(unsigned cycles, msp_alarm_cb_t *cb)
 // We declare the ISR in the library, which disallows sequential multiplexing of this timer.
 // Note: there's no concurrent multiplexing of the timer (at least not in this
 // simple design), so the ISR can be hidden in the library.
-__attribute__ ((interrupt(TIMER_VECTOR(LIBMSP_SLEEP_TIMER_TYPE, LIBMSP_SLEEP_TIMER_IDX, LIBMSP_SLEEP_TIMER_CC))))
-void  TIMER_ISR(LIBMSP_SLEEP_TIMER_TYPE, LIBMSP_SLEEP_TIMER_IDX, LIBMSP_SLEEP_TIMER_CC) (void)
+ISR(TIMER_VECTOR(LIBMSP_SLEEP_TIMER_TYPE, LIBMSP_SLEEP_TIMER_IDX, LIBMSP_SLEEP_TIMER_CC))
 {
     // CCIFG automatically reset
 
