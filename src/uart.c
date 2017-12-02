@@ -4,7 +4,6 @@
 #include <stdbool.h>
 
 #include "periph.h"
-#include <libmspbuiltins/builtins.h>
 #include "uart.h"
 
 #define STRINGIFY(x) XSTRINGIFY(x)

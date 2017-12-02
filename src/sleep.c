@@ -3,7 +3,6 @@
 #include <stdbool.h>
 
 #include "periph.h"
-#include <libmspbuiltins/builtins.h>
 #include "sleep.h"
 
 #define TIMER_NAME_INNER_INNER(type, id) type ## id

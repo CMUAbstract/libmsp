@@ -1,7 +1,6 @@
 #include <msp430.h>
 
 #include <libio/console.h>
-#include <libmspbuiltins/builtins.h>
 #include "temp.h"
 
 // Table 6-62: temp calibration for 1.2v reference
