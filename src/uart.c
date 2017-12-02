@@ -57,17 +57,7 @@ void msp_uart_send_sync(uint8_t *payload, unsigned len)
     while (UART(LIBMSP_UART_IDX, STATW) & UCBUSY);
 }
 
-//__attribute__ ((interrupt(49)))
-//__attribute__ ((interrupt(UART_VECTOR(LIBMSP_UART_IDX))))
-//void UART_ISR(LIBMSP_UART_IDX) (void)
-#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
-#pragma vector=USCI_A0_VECTOR
-__interrupt void USCI_A0_ISR(void)
-#elif defined(__GNUC__)
-void __attribute__ ((interrupt(USCI_A0_VECTOR))) USCI_A0_ISR (void)
-#else
-#error Compiler not supported!
-#endif
+ISR(USCI_A0_VECTOR)
 {
     switch(__even_in_range(UART(LIBMSP_UART_IDX, IV), USCI_UART_UCTXCPTIFG)) {
         case UART_INTFLAG(TXIFG):
@@ -102,9 +92,6 @@ void __attribute__ ((interrupt(USCI_A0_VECTOR))) USCI_A0_ISR (void)
             break;
     }
 }
-__attribute__((section("__interrupt_vector_usci_a0"),aligned(2)))
-void(*__vector_usci_a0)(void) = UART_ISR(LIBMSP_UART_IDX) ;
-
 
 void msp_uart_open()
 {
