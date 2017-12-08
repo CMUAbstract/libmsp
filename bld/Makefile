@@ -5,7 +5,7 @@ LIB = libmsp
 include $(MAKER_ROOT)/Makefile.board
 
 # TODO: copy-pasting code from mspware is not nice
-OBJECTS = \
+OBJECTS += \
 	watchdog.o \
 	mspware/pmm.o \
 	mem.o \
@@ -37,5 +37,10 @@ endif
 override SRC_ROOT = ../../src
 
 override CFLAGS += \
-	-I$(SRC_ROOT)/include/libmsp \
+	-I$(SRC_ROOT)/ \
+	-I$(SRC_ROOT)/include/ \
+	-I$(SRC_ROOT)/include/$(LIB) \
 	-I$(SRC_ROOT)/mspware \
+
+
+

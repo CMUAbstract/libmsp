@@ -1,9 +1,11 @@
 # Can't unconditionally use maker's DEPS facility for this lib, because the lib
 # must be built with gcc even when linked into a Clang-built binary.
 ifeq ($(TOOLCHAIN),gcc)
-DEPS += libmspware
-else # TOOLCHAIN != gcc
+DEPS += libmsp libmspware
 
+$(warning right where we should be!!)
+else # TOOLCHAIN != gcc
+$(warning why are we here????)
 # libedb is special because it has to be compiled by GCC, not Clang,
 # even if the app is built with Clang
 CFLAGS += -I$(LIB_ROOT)/libmspware/src/include
