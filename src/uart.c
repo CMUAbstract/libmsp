@@ -99,9 +99,12 @@ void __attribute__ ((interrupt(USCI_A0_VECTOR))) USCI_A0_ISR (void)
             break;
     }
 }
-#ifndef __GNUC__
+
+#ifndef LIBCOATIGCC
+
 __attribute__((section("__interrupt_vector_usci_a0"),aligned(2)))
 void(*__vector_usci_a0)(void) = UART_ISR(LIBMSP_UART_IDX) ;
+
 #endif
 
 void msp_uart_open()
