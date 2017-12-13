@@ -107,5 +107,7 @@ void  TIMER_ISR(LIBMSP_SLEEP_TIMER_TYPE, LIBMSP_SLEEP_TIMER_IDX, LIBMSP_SLEEP_TI
     } // else: we just incremented the tick count
 #endif // LIBMSP_SLEEP_TIMER_TICKS
 }
+#ifndef __GNUC__
 __attribute__((section("__interrupt_vector_timer0_b0"),aligned(2)))
 void(*__vector_timer0_b0)(void) = TIMER_ISR(LIBMSP_SLEEP_TIMER_TYPE, LIBMSP_SLEEP_TIMER_IDX, LIBMSP_SLEEP_TIMER_CC);
+#endif
