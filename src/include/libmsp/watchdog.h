@@ -8,5 +8,6 @@ void msp_watchdog_disable();
 void msp_watchdog_kick();
 void msp_watchdog_hold();
 void msp_watchdog_release();
+void msp_watchdog_panic();
 
 #endif // LIBMSP_WATCHDOG_H

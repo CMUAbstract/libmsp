@@ -26,3 +26,8 @@ void msp_watchdog_release()
 {
     WDTCTL = WDTPW | ((WDTCTL & ~WDTHOLD) & 0x00ff);
 }
+
+void msp_watchdog_panic()
+{
+    WDTCTL |= 0xff00;
+}
