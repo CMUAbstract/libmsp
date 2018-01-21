@@ -18,8 +18,14 @@ endif
 
 override SRC_ROOT = ../../src
 
+$(info toolchain $(TOOLCHAIN))
+ifeq ($(TOOLCHAIN),ticl)
+override CFLAGS += \
+	--include_path="$(SRC_ROOT)/include/libmsp" \
+	--include_path="$(SRC_ROOT)/mspware" 
+else
 override CFLAGS += \
 	-I$(SRC_ROOT)/include/libmsp \
-	-I$(SRC_ROOT)/mspware \
-
-include ../Makefile.config
+	-I$(SRC_ROOT)/mspware
+endif
+#include ../Makefile.config

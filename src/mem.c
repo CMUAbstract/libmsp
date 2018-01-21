@@ -20,7 +20,6 @@ void *memset(void *s, int c, size_t n)
     }
     return s;
 }
-#endif
 void my_memset(void *s, int c, size_t n)
 {
         __asm__ volatile ("mov r15, r12\n"
@@ -33,3 +32,4 @@ void my_memset(void *s, int c, size_t n)
 			);
 
 }
+#endif

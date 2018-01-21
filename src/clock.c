@@ -139,7 +139,7 @@ void msp_clock_setup()
 #define s(x) #x
 #define ss(x) s(x)
 
-#pragma message "bits" ss(CONFIG_DCOFSEL_BITS)
+//#pragma message "bits" ss(CONFIG_DCOFSEL_BITS)
 #if CONFIG_DCOCLKDIV_FREQ == 16000000
 	// 16MHz
 	FRCTL0 = 0xA500 | ((1) << 4);  //FRCTLPW | NWAITS_1;
