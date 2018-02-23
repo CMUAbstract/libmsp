@@ -90,7 +90,7 @@
     GPIO(port, SEL) |= (pin_bits); \
 } while (0)
 
-#elif defined(__MSP430FR5969__) || defined(__MSP430FR5949__)
+#elif defined(__MSP430FR5969__) || defined(__MSP430FR5949__) || defined(__MSP430FR5994__)
 
 #define UART_SET_SEL(port, pin_bits) do { \
     GPIO(port, SEL0) &= ~(pin_bits); \

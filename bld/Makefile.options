@@ -98,7 +98,7 @@ ifneq ($(LIBMSP_UART_IDX),)
 override CFLAGS += -DLIBMSP_UART_IDX=$(LIBMSP_UART_IDX)
 
 ifneq ($(words $(LIBMSP_UART_PIN_RX) $(LIBMSP_UART_PIN_TX)),1)
-$(error One of these config variables needs to be defined: LIBMSP_UART_PIN_{RX,TX})
+$(error One of these config variables needs to be defined - LIBMSP_UART_PIN_{RX,TX})
 endif
 
 ifneq ($(LIBMSP_UART_PIN_RX),)
@@ -113,24 +113,24 @@ ifneq ($(LIBMSP_UART_BAUDRATE),)
 override CFLAGS := $(CFLAGS) $(call uart_baudrate,LIBMSP_UART_BAUDRATE,\
                                     $(LIBMSP_UART_BAUDRATE),$(CLOCK_FREQ_$(LIBMSP_UART_CLOCK)))
 else
-$(error Undefined config variable: LIBMSP_UART_BAUDRATE)
+$(error Undefined config variable - LIBMSP_UART_BAUDRATE)
 endif # LIBMSP_UART_BAUDRATE
 
 ifneq ($(LIBMSP_UART_CLOCK),)
 override CFLAGS += -DLIBMSP_UART_CLOCK=$(LIBMSP_UART_CLOCK)
 else
-$(error Undefined confing variable: LIBMSP_UART_CLOCK)
+$(error Undefined confing variable - LIBMSP_UART_CLOCK)
 endif # LIBMSP_UART_CLOCK
 
 ifneq ($(LIBMSP_REF_SETTLE_TIME),)
 override CFLAGS += $(call interval,LIBMSP_REF_SETTLE_TIME,\
-			$(LIBMSP_REF_SETTLE_TIME),$(call calc_int,$(CLOCK_FREQ_MCLK)),0)
+		$(LIBMSP_REF_SETTLE_TIME),$(call calc_int,$(CLOCK_FREQ_MCLK)),0)
 # Use this one for delaying with msp_sleep in the code
 #override CFLAGS += $(call interval,LIBMSP_REF_SETTLE_TIME,\
 			#$(LIBMSP_REF_SETTLE_TIME),\
 			#$(call calc_int,$(CLOCK_FREQ_$(LIBMSP_SLEEP_TIMER_CLK)) / ($(LIBMSP_SLEEP_TIMER_DIV))),0)
 else
-$(error Undefined config var: LIBMSP_REF_SETTLE_TIME)
+$(error Undefined config var - LIBMSP_REF_SETTLE_TIME)
 endif
 
 endif # LIBMSP_UART_IDX

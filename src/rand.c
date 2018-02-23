@@ -5,7 +5,7 @@
 
 #include "rand.h"
 
-#include "mem.h"
+#include <libdnn/mem.h>
 
 #define RAND_LCG_A 1103515245ULL
 #define RAND_LCG_C 12345
