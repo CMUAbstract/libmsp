@@ -21,4 +21,6 @@ void msp_alarm(unsigned cycles, unsigned ticks, msp_alarm_cb_t *cb);
 void msp_alarm(unsigned cycles, msp_alarm_cb_t *cb);
 #endif // LIBMSP_SLEEP_TIMER_TICKS
 
+void  TIMER_ISR(LIBMSP_SLEEP_TIMER_TYPE, LIBMSP_SLEEP_TIMER_IDX,LIBMSP_SLEEP_TIMER_CC) (void);
+
 #endif // LIBMSP_SLEEP_H
