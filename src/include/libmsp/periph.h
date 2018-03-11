@@ -289,6 +289,7 @@
 #endif // !__clang__
 
 // Fill-in value-keyd macros that are missing from TI's headers
+#if 0
 #define TAIDEX__1 TAIDEX_0
 #define TAIDEX__2 TAIDEX_1
 #define TAIDEX__3 TAIDEX_2
@@ -297,6 +298,7 @@
 #define TAIDEX__6 TAIDEX_5
 #define TAIDEX__7 TAIDEX_6
 #define TAIDEX__8 TAIDEX_7
+#endif
 
 #if defined(__MSP430F5340__) || defined(__CC430F5137__) || defined(__MSP430FR6989) || defined(__MSP430FR5949)
 // Ugly workaround to make the pretty GPIO macro work for OUT register
