@@ -301,8 +301,11 @@
 #define TAIDEX__8 TAIDEX_7
 #endif // __GNUC__
 
-#if defined(__MSP430F5340__) || defined(__CC430F5137__) || \
-    defined(__MSP430FR6989) || defined(__MSP430FR5949) || \
+#if defined(__MSP430F5340__) || \
+    defined(__CC430F5137__) || \
+    defined(__MSP430FR6989) || \
+    defined(__MSP430FR5949) || \
+    defined(__MSP430FR5969) || \
     defined(__MSP430FR5994)
 // Ugly workaround to make the pretty GPIO macro work for OUT register
 // (a control bit for TAxCCTLx uses the name 'OUT'): rename to OUT to TOUT.
