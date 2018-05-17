@@ -1,7 +1,10 @@
 #include <msp430.h>
 
+#if defined(__MSP430F5340__) || defined(__CC430F5137__)
+#include <libmspware/pmm.h>
+#endif // __MSP430F5340__ || __CC430F5137__
+
 #include "periph.h"
-#include "pmm.h" // must be before pin_assign.h since the latter undefs
 
 #include "clock.h"
 
