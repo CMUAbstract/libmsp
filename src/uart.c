@@ -43,7 +43,7 @@ void msp_uart_send_sync(uint8_t *payload, unsigned len)
 // On the CC430 family, the ISR does not fire as a result of enabling IE
 // (despite IFG being on). We need to write a byte to clear the IFG, and await
 // the interrupt. Also, the TXIFG behavior is different, see ISR.
-#ifdef __CC430__
+#if defined(__CC430__) || defined(__MSP430F__)
     --tx_len;
     UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++; // first byte, clears IFG
 #endif
@@ -60,7 +60,7 @@ void msp_uart_send_sync(uint8_t *payload, unsigned len)
 
     // TXCPTIFG (and TXIFG) both happen before the byte is
     // transfered... so have to busywait
-    while (UART(LIBMSP_UART_IDX, STATW) & UCBUSY);
+    while (UART(LIBMSP_UART_IDX, UART_STAT) & UCBUSY);
 }
 
 ISR(USCI_A0_VECTOR)
@@ -72,21 +72,21 @@ ISR(USCI_A0_VECTOR)
 // on MSP430FR, TXIFG fires when is ready to accept the next byte, which
 // happens before the last has finished transmitting byte. Hence, the
 // logic in the ISR is different.
-#ifdef __CC430__
+#if defined(__CC430__) || defined(__MSP430F__)
             if (tx_len--) {
                 UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++;
             } else { // last byte got done
                 tx_finished = true;
                 __bic_SR_register_on_exit(LPM4_bits); // wakeup
             }
-#else // !__CC430__
+#else // !(__CC430__ || __MSP430F__)
             UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++;
             if (--tx_len == 0) {
                 UART(LIBMSP_UART_IDX, IE) &= ~UCTXIE;
                 UART(LIBMSP_UART_IDX, IFG) &= ~UCTXCPTIFG;
                 UART(LIBMSP_UART_IDX, IE) |= UCTXCPTIE;
             }
-#endif // !__CC430__
+#endif // !(__CC430__ || __MSP430F__)
             break;
         case UART_INTFLAG(RXIFG):
             break;
