@@ -74,7 +74,7 @@ ISR(USCI_A0_VECTOR)
 // logic in the ISR is different.
 #ifdef __CC430__
             if (tx_len--) {
-                UART(LIBMSPUARTLINK_UART_IDX, TXBUF) = *tx_data++;
+                UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++;
             } else { // last byte got done
                 tx_finished = true;
                 __bic_SR_register_on_exit(LPM4_bits); // wakeup
