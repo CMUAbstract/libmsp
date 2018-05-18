@@ -4,6 +4,10 @@
 #include <libmspware/pmm.h>
 #endif // __MSP430F5340__ || __CC430F5137__
 
+#ifdef __clang__
+#include <libmspbuiltins/builtins.h>
+#endif // __clang__
+
 #include "periph.h"
 
 #include "clock.h"
