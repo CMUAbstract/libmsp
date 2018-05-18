@@ -304,7 +304,8 @@
 #endif // !__clang__
 
 // Fill-in value-keyd macros that are missing from TI's headers in older TI MSPGCC
-#if __GNUC__ < 6 /* tested: v4.9 does not define these, v6.4 does define these */
+#if GCC_VERSION_MAJOR < 6 /* tested: v4.9 (MSPGCC v3) does not define these,
+                              v6.4 (MSPGCC v5) does define these */
 #define TAIDEX__1 TAIDEX_0
 #define TAIDEX__2 TAIDEX_1
 #define TAIDEX__3 TAIDEX_2
@@ -313,7 +314,7 @@
 #define TAIDEX__6 TAIDEX_5
 #define TAIDEX__7 TAIDEX_6
 #define TAIDEX__8 TAIDEX_7
-#endif // __GNUC__
+#endif // GCC_VERSION_MAJOR < 6
 
 // These are missing from latest TI MSPGCC (v5) and older ones (v3)
 #if defined(__MSP430F5340__)
