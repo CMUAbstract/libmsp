@@ -11,11 +11,23 @@ OBJECTS = \
 	clock.o \
 
 ifneq ($(LIBMSP_SLEEP_TIMER),)
+ifneq ($(TOOLCHAIN),clang)
 OBJECTS += sleep.o
+else # TOOLCHAIN == clang
+$(error libmsp/sleep.c currently not supported with Clang)
+# because: __bic_SR_register_on_exit() not implemented in LLVM.
+# See here for ideas on how to do it:
+# https://github.com/rust-lang-nursery/embedded-wg/issues/20#issuecomment-296538976
+endif # TOOLCHAIN == clang
 endif # LIBMSP_SLEEP_TIMER
 
 ifneq ($(LIBMSP_UART_IDX),)
+ifneq ($(TOOLCHAIN),clang)
 OBJECTS += uart.o
+else # TOOLCHAIN == clang
+$(error libmsp/uart.c currently not supported with Clang)
+# because: (see sleep.c case above)
+endif # TOOLCHAIN == clang
 endif # LIBMSP_UART_IDX
 
 ifneq ($(LIBMSP_TICK_TIMER),)
