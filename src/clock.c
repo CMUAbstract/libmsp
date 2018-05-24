@@ -4,9 +4,9 @@
 #include <libmspware/pmm.h>
 #endif // __MSP430F5340__ || __CC430F5137__
 
-#ifdef __clang__
+#if defined(__clang__) && CLANG_VERSION_MAJOR < 5
 #include <libmspbuiltins/builtins.h>
-#endif // __clang__
+#endif // clang < 5
 
 #include "periph.h"
 
