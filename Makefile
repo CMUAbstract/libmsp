@@ -24,14 +24,19 @@ endif # TOOLCHAIN == clang
 endif # LIBMSP_SLEEP_TIMER
 
 ifneq ($(LIBMSP_UART_IDX),)
-ifneq ($(TOOLCHAIN),clang)
-OBJECTS += uart.o
-else # TOOLCHAIN == clang
+
+# In Clang only polling mode is supported (because no
+# __bic_SR_register_on_exit, see comment and link above)
+ifeq ($(TOOLCHAIN),clang)
+ifeq ($(LIBMSP_UART_SLEEP),1)
 ifeq ($(findstring clean,$(MAKECMDGOALS)),)
-$(error libmsp/uart.c currently not supported with Clang)
+$(error Sleep mode in libmsp/uart.c is not supported with Clang: \
+	unset LIBMSP_UART_SLEEP for polling mode)
 endif # !clean
-# because: (see sleep.c case above)
-endif # TOOLCHAIN == clang
+endif # LIBMSP_UART_SLEEP != 1
+endif # Clang
+
+OBJECTS += uart.o
 endif # LIBMSP_UART_IDX
 
 ifneq ($(LIBMSP_TICK_TIMER),)
