@@ -14,7 +14,9 @@ ifneq ($(LIBMSP_SLEEP_TIMER),)
 ifneq ($(TOOLCHAIN),clang)
 OBJECTS += sleep.o
 else # TOOLCHAIN == clang
+ifeq ($(findstring clean,$(MAKECMDGOALS)),)
 $(error libmsp/sleep.c currently not supported with Clang)
+endif # !clean
 # because: __bic_SR_register_on_exit() not implemented in LLVM.
 # See here for ideas on how to do it:
 # https://github.com/rust-lang-nursery/embedded-wg/issues/20#issuecomment-296538976
@@ -25,7 +27,9 @@ ifneq ($(LIBMSP_UART_IDX),)
 ifneq ($(TOOLCHAIN),clang)
 OBJECTS += uart.o
 else # TOOLCHAIN == clang
+ifeq ($(findstring clean,$(MAKECMDGOALS)),)
 $(error libmsp/uart.c currently not supported with Clang)
+endif # !clean
 # because: (see sleep.c case above)
 endif # TOOLCHAIN == clang
 endif # LIBMSP_UART_IDX
