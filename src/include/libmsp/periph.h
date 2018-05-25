@@ -284,7 +284,7 @@
 // vector numbers that are odd or above 30. So, this problem with the above
 // problem form a catch-22 situation: if we pass N/2 then the atttribute is
 // accepted, but we get multiply-defined values; if we pass N, it's rejected;
-// and if we pass N*2, it's rejected. The patch is in lib/Sema/SemaCeclAttr.cpp
+// and if we pass N*2, it's rejected. The patch is in lib/Sema/SemaDeclAttr.cpp
 // to change the 'if (Num & 1) || Num > 30)' to 'if (Num == 0)' (zero is not a
 // valid vector).
 
