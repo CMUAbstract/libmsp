@@ -11,16 +11,20 @@ OBJECTS = \
 	clock.o \
 
 ifneq ($(LIBMSP_SLEEP_TIMER),)
-ifneq ($(TOOLCHAIN),clang)
-OBJECTS += sleep.o
-else # TOOLCHAIN == clang
-ifeq ($(findstring clean,$(MAKECMDGOALS)),)
-$(error libmsp/sleep.c currently not supported with Clang)
-endif # !clean
-# because: __bic_SR_register_on_exit() not implemented in LLVM.
-# See here for ideas on how to do it:
+
+# In Clang only polling mode is supported (because no
+# __bic_SR_register_on_exit. See here for ideas on how to do it:
 # https://github.com/rust-lang-nursery/embedded-wg/issues/20#issuecomment-296538976
-endif # TOOLCHAIN == clang
+ifeq ($(TOOLCHAIN),clang)
+ifeq ($(LIBMSP_SLEEP),1)
+ifeq ($(findstring clean,$(MAKECMDGOALS)),)
+$(error Sleep mode in libmsp/sleep.c is not supported with Clang: \
+	unset LIBMSP_SLEEP for polling mode)
+endif # !clean
+endif # LIBMSP_UART_SLEEP != 1
+endif # Clang
+
+OBJECTS += sleep.o
 endif # LIBMSP_SLEEP_TIMER
 
 ifneq ($(LIBMSP_UART_IDX),)
@@ -28,10 +32,10 @@ ifneq ($(LIBMSP_UART_IDX),)
 # In Clang only polling mode is supported (because no
 # __bic_SR_register_on_exit, see comment and link above)
 ifeq ($(TOOLCHAIN),clang)
-ifeq ($(LIBMSP_UART_SLEEP),1)
+ifeq ($(LIBMSP_SLEEP),1)
 ifeq ($(findstring clean,$(MAKECMDGOALS)),)
 $(error Sleep mode in libmsp/uart.c is not supported with Clang: \
-	unset LIBMSP_UART_SLEEP for polling mode)
+	unset LIBMSP_SLEEP for polling mode)
 endif # !clean
 endif # LIBMSP_UART_SLEEP != 1
 endif # Clang

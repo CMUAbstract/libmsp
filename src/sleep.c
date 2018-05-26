@@ -52,6 +52,7 @@ void msp_sleep(unsigned cycles)
 
     alarm_callback = NULL;
 
+#ifdef LIBMSP_SLEEP
     // The int disable/enable implement the classic check-and-sleep pattern
     __disable_interrupt();
     TIMER(SLEEP_TIMER, CTL) |= MC_1; // start timer
@@ -61,6 +62,10 @@ void msp_sleep(unsigned cycles)
         __disable_interrupt();
     }
     __enable_interrupt();
+#else // ! LIBMSP_SLEEP (polling)
+    TIMER(SLEEP_TIMER, CTL) |= MC_1; // start timer
+    while (TIMER_CC(SLEEP_TIMER, LIBMSP_SLEEP_TIMER_CC, CCTL) & CCIE);
+#endif // ! LIBMSP_SLEEP (polling)
 }
 
 #ifdef LIBMSP_SLEEP_TIMER_TICKS
@@ -99,9 +104,11 @@ ISR(TIMER_VECTOR(LIBMSP_SLEEP_TIMER_TYPE, LIBMSP_SLEEP_TIMER_IDX, LIBMSP_SLEEP_T
             wakeup = act & MSP_ALARM_ACTION_WAKEUP;
         }
 
+#ifdef LIBMSP_SLEEP
         if (wakeup) {
             __bic_SR_register_on_exit(LPM4_bits); // exit sleep
         }
+#endif // LIBMSP_SLEEP
 #ifdef LIBMSP_SLEEP_TIMER_TICKS
     } // else: we just incremented the tick count
 #endif // LIBMSP_SLEEP_TIMER_TICKS

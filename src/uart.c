@@ -50,7 +50,7 @@ void msp_uart_send_sync(uint8_t *payload, unsigned len)
 
     // Wait while ISR TXes the remaining bytes
     //
-#ifdef LIBMSP_UART_SLEEP
+#ifdef LIBMSP_SLEEP
     // We have to disable TX int from ISR, otherwise, will enter infinite ISR loop.
     __disable_interrupt(); // classic lock-check-(sleep+unlock)-lock pattern
     while (!tx_finished) {
@@ -58,9 +58,9 @@ void msp_uart_send_sync(uint8_t *payload, unsigned len)
         __disable_interrupt();
     }
     __enable_interrupt();
-#else // ! LIBMSP_UART_SLEEP
+#else // ! LIBMSP_SLEEP
     while (!tx_finished);
-#endif // ! LIBMSP_UART_SLEEP
+#endif // ! LIBMSP_SLEEP
 
     // TXCPTIFG (and TXIFG) both happen before the byte is
     // transfered... so have to busywait
@@ -81,9 +81,9 @@ ISR(USCI_A0_VECTOR)
                 UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++;
             } else { // last byte got done
                 tx_finished = true;
-#ifdef LIBMSP_UART_SLEEP
+#ifdef LIBMSP_SLEEP
                 __bic_SR_register_on_exit(LPM4_bits); // wakeup
-#endif // LIBMSP_UART_SLEEP
+#endif // LIBMSP_SLEEP
             }
 #else // !(__CC430__ || __MSP430F__)
             UART(LIBMSP_UART_IDX, TXBUF) = *tx_data++;
@@ -98,9 +98,9 @@ ISR(USCI_A0_VECTOR)
             break;
         case UART_INTFLAG(TXCPTIFG):
             tx_finished = true;
-#ifdef LIBMSP_UART_SLEEP
+#ifdef LIBMSP_SLEEP
             __bic_SR_register_on_exit(LPM4_bits); // wakeup
-#endif // LIBMSP_UART_SLEEP
+#endif // LIBMSP_SLEEP
             break;
         default:
             break;
