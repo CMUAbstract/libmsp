@@ -104,11 +104,11 @@ ISR(TIMER_VECTOR(LIBMSP_SLEEP_TIMER_TYPE, LIBMSP_SLEEP_TIMER_IDX, LIBMSP_SLEEP_T
             wakeup = act & MSP_ALARM_ACTION_WAKEUP;
         }
 
-#ifdef LIBMSP_SLEEP
         if (wakeup) {
+#ifdef LIBMSP_SLEEP
             __bic_SR_register_on_exit(LPM4_bits); // exit sleep
-        }
 #endif // LIBMSP_SLEEP
+        }
 #ifdef LIBMSP_SLEEP_TIMER_TICKS
     } // else: we just incremented the tick count
 #endif // LIBMSP_SLEEP_TIMER_TICKS
