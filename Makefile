@@ -1,6 +1,5 @@
 LIB = libmsp
 
-# TODO: copy-pasting code from mspware is not nice
 OBJECTS = \
 	watchdog.o \
 	mem.o \
