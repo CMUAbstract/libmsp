@@ -149,6 +149,7 @@ void msp_clock_setup()
 
     CSCTL2 = SELA_0 | SELS_3 | SELM_3;
     CSCTL3 = DIVA_0 | DIVS_0 | DIVM_0;
+    CSCTL0_H = 0;
 
 #else // __MSP430*__
 #error Device not supported by libmsp/clock.c
