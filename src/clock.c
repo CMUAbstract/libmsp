@@ -158,7 +158,8 @@ void msp_clock_setup()
     CSCTL1 = DCORSEL + DCOFSEL_4;
 #endif
 		// ACLOCK: VLOCLK (very low power)
-    CSCTL2 = SELA__VLOCLK | SELS_3 | SELM_3;
+    //CSCTL2 = SELA__VLOCLK | SELS_3 | SELM_3;
+    CSCTL2 = SELA_0 | SELS_3 | SELM_3;
     CSCTL3 = DIVA_0 | DIVS_0 | DIVM_0;
 
 #else // __MSP430*__
