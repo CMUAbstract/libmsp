@@ -152,7 +152,7 @@ void msp_clock_setup()
     CSCTL0_H = CSKEY_H;
     CSCTL1 = CONFIG_DCOFSEL_BITS | CONFIG_DCORSEL_BITS;
     CSCTL2 = SELA__LFXTCLK | SELS__DCOCLK | SELM__DCOCLK;
-    CSCTL3 = DIVA__1 | DIVS__1 | DIVM__1;
+    CSCTL3 = DIVA__1 | DIVS__4 | DIVM__1;
     CSCTL0_H = 0;
 
 #else // __MSP430*__
