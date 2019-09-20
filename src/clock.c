@@ -137,11 +137,17 @@ void msp_clock_setup()
 #elif defined(__MSP430FR5969__) || defined(__MSP430FR6989__) || \
       defined(__MSP430FR5949__) || defined(__MSP430FR5994__)
 
+    // For frequencies at or above 16MHz, must enable FRAM wait states
+#if CONFIG_DCOCLKDIV_FREQ >= 16000000
+    FRCTL0 = FRCTLPW | NWAITS_1;
+#endif // CONFIG_DCOCLKDIV_FREQ
     CSCTL0_H = CSKEY_H;
     CSCTL1 = CONFIG_DCOFSEL_BITS | CONFIG_DCORSEL_BITS;
-
-    CSCTL2 = SELA_0 | SELS_3 | SELM_3;
-    CSCTL3 = DIVA_0 | DIVS_0 | DIVM_0;
+    CSCTL2 = SELA__LFXTCLK | SELS__DCOCLK | SELM__DCOCLK;
+    //CSCTL2 = SELA_0 | SELS_3 | SELM_3;
+    //CSCTL3 = DIVA_0 | DIVS_0 | DIVM_0;
+    CSCTL3 = DIVA__1 | DIVS__4 | DIVM__1;
+    CSCTL0_H = 0;
 
 #else // __MSP430*__
 #error Device not supported by libmsp/clock.c
