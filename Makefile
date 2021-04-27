@@ -27,6 +27,7 @@ ifneq ($(LIBMSP_UART_IDX),)
 # In Clang only polling mode is supported (because no
 # __bic_SR_register_on_exit, see comment and link above)
 ifeq ($(TOOLCHAIN),clang)
+override CFLAGS += -DLIBMSP_NO_MLARGE
 ifeq ($(LIBMSP_SLEEP),1)
 ifeq ($(findstring clean,$(MAKECMDGOALS)),)
 $(error Sleep mode in libmsp/uart.c is not supported with Clang: \
@@ -49,6 +50,11 @@ endif # LIBMSP_TEMP
 # pseudo-RNG is only supported with hardware multiplier
 ifeq ($(HWMULT),1)
 OBJECTS += rand.o
+endif
+
+# Flag to use small memory model instead of large
+ifneq ($(LIBMSP_NO_MLARGE),)
+override CFLAGS += -DLIBMSP_NO_MLARGE
 endif
 
 override SRC_ROOT = ../../src
