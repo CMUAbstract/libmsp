@@ -58,7 +58,7 @@ void msp_sleep(unsigned cycles)
     TIMER(SLEEP_TIMER, CTL) |= MC_1; // start timer
 
     while (TIMER_CC(SLEEP_TIMER, LIBMSP_SLEEP_TIMER_CC, CCTL) & CCIE) { // might not be our ISR
-        __bis_SR_register(LPM0_bits + GIE); // enable interrupt and go to sleep
+        __bis_SR_register(LPM3_bits + GIE); // enable interrupt and go to sleep
         __disable_interrupt();
     }
     __enable_interrupt();
